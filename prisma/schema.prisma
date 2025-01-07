@@ -5,11 +5,13 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
 }
 
 model User {
   id    Int    @id @default(autoincrement())
-  name  String?
+  password String
   email String @unique
+  name  String?
   image String?
 }
