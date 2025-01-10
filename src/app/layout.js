@@ -30,6 +30,7 @@ export default function RootLayout({ children }) {
           <li><Link href='/events'>events</Link></li>
           <li><Link href='/balance/withdraw'>withdraw</Link></li>
           <li><Link href='/balance/deposit'>deposit</Link></li>
+          <li><Link href='/auth/signup'>signup</Link></li>
         </ul>
         <AuthProvider>{children}</AuthProvider>
       </body>
