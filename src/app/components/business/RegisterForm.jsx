@@ -19,10 +19,12 @@ export function RegisterForm() {
       },
       body: JSON.stringify({ email, password }),
     });
+    
     const data = await res.json();
-
+    
     if (res.ok) {
       const { user: { email }} = data; 
+
       const signInResponse = await signIn('credentials', {
           email,
           password,
@@ -31,11 +33,13 @@ export function RegisterForm() {
 
       if (signInResponse?.error) {
           console.error('Ошибка входа:', signInResponse.error);
+          alert('Ошибка входа:', signInResponse.error);
       } else {
           router.push('/');
       }
     } else {
-      alert(data.error || 'Register failed');
+      console.error(data || 'Register failed');
+      alert(data || 'Register failed');
     }
   };
 

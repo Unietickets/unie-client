@@ -25,14 +25,14 @@ export async function POST(req) {
         const { password, ...userWithoutPassword } = user;
 
       return new Response(JSON.stringify({ user: userWithoutPassword }), {
+        status: 201, 
         headers: { 
             'Content-Type': 'application/json',
-            status: 201 
         }
     });
     } catch (error) {
-      return new Response('User  already exists', {
-        headers: { status: 500 }
+      return new Response(JSON.stringify('User already exists'), {
+        status: 500
     });
     }
 }
