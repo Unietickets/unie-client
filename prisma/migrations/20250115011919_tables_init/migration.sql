@@ -126,3 +126,42 @@ ALTER TABLE "Deal" ADD CONSTRAINT "Deal_buyer_id_fkey" FOREIGN KEY ("buyer_id") 
 
 -- AddForeignKey
 ALTER TABLE "Deal" ADD CONSTRAINT "Deal_seller_id_fkey" FOREIGN KEY ("seller_id") REFERENCES "User"("user_id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+-- Выполнение триггеров
+CREATE OR REPLACE FUNCTION update_event_ticket_counts() 
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Если билет добавляется
+    IF TG_OP = 'INSERT' THEN
+        -- Увеличиваем количество проданных билетов
+        UPDATE events
+        SET tickets_sold = tickets_sold + 1,
+            tickets_available = tickets_available - 1
+        WHERE event_id = NEW.event_id;
+
+    -- Если статус билета обновляется
+    ELSIF TG_OP = 'UPDATE' THEN
+        -- Проверяем, изменился ли статус билета
+        IF NEW.status = 'verified' AND OLD.status != 'verified' THEN
+            -- Увеличиваем количество проданных билетов
+            UPDATE events
+            SET tickets_sold = tickets_sold + 1,
+                tickets_available = tickets_available - 1
+            WHERE event_id = NEW.event_id;
+        ELSIF NEW.status != 'verified' AND OLD.status = 'verified' THEN
+            -- Уменьшаем количество проданных билетов
+            UPDATE events
+            SET tickets_sold = tickets_sold - 1,
+                tickets_available = tickets_available + 1
+            WHERE event_id = NEW.event_id;
+        END IF;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ticket_count_trigger
+AFTER INSERT OR UPDATE ON "Ticket"
+FOR EACH ROW EXECUTE FUNCTION update_event_ticket_counts();
