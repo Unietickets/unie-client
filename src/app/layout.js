@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import AuthProvider from "./AuthProvider";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,10 +30,9 @@ export default function RootLayout({ children }) {
           <li><Link href='/events'>events</Link></li>
           <li><Link href='/balance/withdraw'>withdraw</Link></li>
           <li><Link href='/balance/deposit'>deposit</Link></li>
-          <li><Link href='/auth/login'>login</Link></li>
-          <li><Link href='/auth/register'>register</Link></li>
+          <li><Link href='/auth/signup'>signup</Link></li>
         </ul>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
