@@ -135,7 +135,7 @@ BEGIN
     -- Если билет добавляется
     IF TG_OP = 'INSERT' THEN
         -- Увеличиваем количество проданных билетов
-        UPDATE events
+        UPDATE "Event"
         SET tickets_sold = tickets_sold + 1,
             tickets_available = tickets_available - 1
         WHERE event_id = NEW.event_id;
@@ -145,13 +145,13 @@ BEGIN
         -- Проверяем, изменился ли статус билета
         IF NEW.status = 'verified' AND OLD.status != 'verified' THEN
             -- Увеличиваем количество проданных билетов
-            UPDATE events
+            UPDATE "Event"
             SET tickets_sold = tickets_sold + 1,
                 tickets_available = tickets_available - 1
             WHERE event_id = NEW.event_id;
         ELSIF NEW.status != 'verified' AND OLD.status = 'verified' THEN
             -- Уменьшаем количество проданных билетов
-            UPDATE events
+            UPDATE "Event"
             SET tickets_sold = tickets_sold - 1,
                 tickets_available = tickets_available + 1
             WHERE event_id = NEW.event_id;
