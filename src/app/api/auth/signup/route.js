@@ -1,11 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-const prismaOptions = process.env.MODE === 'development' ? {
-    log: ['query', 'info', 'warn', 'error'],
-} : null;
-
-const prisma = new PrismaClient(prismaOptions);
+import prisma from '@/app/lib/prisma';
 
 export async function POST(req) {
     const body = await req.json()

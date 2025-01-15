@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import AuthProvider from "./AuthProvider";
+import SeedMock from "./components/business/SeedMock";
 
 
 const geistSans = Geist({
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
           <li><Link href='/balance/deposit'>deposit</Link></li>
           <li><Link href='/auth/signup'>signup</Link></li>
         </ul>
+        <SeedMock />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

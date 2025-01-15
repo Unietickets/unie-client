@@ -1,13 +1,8 @@
-import { PrismaClient } from "@prisma/client";
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from 'bcryptjs';
 
-const prismaOptions = process.env.MODE === 'development' ? {
-    log: ['query', 'info', 'warn', 'error'],
-} : null;
-
-const prisma = new PrismaClient(prismaOptions);
+import prisma from "@/app/lib/prisma";
 
 export const authOptions = {
     providers: [
