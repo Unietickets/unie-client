@@ -9,9 +9,112 @@ generator client {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  password String
-  email String @unique
-  name  String?
-  image String?
+  user_id             Int                  @id @default(autoincrement())
+  name                String               @db.VarChar(255)
+  registration_date   DateTime             @default(now())
+  verification_status VerificationStatus   @default(NotVerified)
+  email               String               @unique @db.VarChar(255)
+  password            String               @db.VarChar(255)
+  phone_number        String?              @db.VarChar(20)
+  is_active           Boolean              @default(true)
+  verificationDocuments VerificationDocument[]
+  transactions        Transaction[]
+  tickets             Ticket[]
+  dealsAsBuyer        Deal[]               @relation("BuyerDeals")
+  dealsAsSeller       Deal[]               @relation("SellerDeals")
+}
+
+model VerificationDocument {
+  doc_id             Int                  @id @default(autoincrement())
+  user_id            Int
+  upload_date        DateTime             @default(now())
+  document_image     String?              @db.VarChar(255)
+  verification_status VerificationStatus   @default(NotVerified)
+
+  user               User                  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+
+model Event {
+  event_id          Int                  @id @default(autoincrement())
+  name              String               @db.VarChar(255)
+  status            EventStatus          @default(coming)
+  genre             String?              @db.VarChar(100)
+  tickets_available Int                  @default(0)
+  tickets_sold      Int                  @default(0)
+  event_date        DateTime
+  location          String?              @db.VarChar(255)
+  description       String?              @db.Text
+  tickets           Ticket[]
+  deals             Deal[]
+}
+
+model Transaction {
+  transaction_id    Int                  @id @default(autoincrement())
+  user_id           Int
+  direction         TransactionDirection
+  amount            Decimal              @db.Decimal(10, 2)
+  transaction_date  DateTime             @default(now())
+  status            TransactionStatus     @default(created)
+
+  user              User                  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+
+model Ticket {
+  id                Int                  @id @default(autoincrement())
+  user_id           Int
+  event_id          Int
+  upload_date       DateTime             @default(now())
+  image             String?              @db.VarChar(255)
+  status            TicketStatus         @default(unverified)
+
+  user              User                  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  event             Event                 @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
+}
+
+model Deal {
+  deal_id           Int                  @id @default(autoincrement())
+  event_id          Int
+  buyer_id          Int
+  seller_id         Int
+  deal_date         DateTime             @default(now())
+  status            DealStatus           @default(in_progress)
+  price             Decimal              @db.Decimal(10, 2)
+
+  event             Event                 @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
+  buyer             User                  @relation("BuyerDeals", fields: [buyer_id], references: [user_id], onDelete: Cascade)
+  seller            User                  @relation("SellerDeals", fields: [seller_id], references: [user_id], onDelete: Cascade)
+}
+
+
+enum VerificationStatus {
+  NotVerified
+  Verified
+  Reupload
+}
+
+enum EventStatus {
+  coming
+  completed
+}
+
+enum TransactionDirection {
+  deposit
+  withdraw
+}
+
+enum TransactionStatus {
+  created
+  in_process
+  completed
+}
+
+enum TicketStatus {
+  unverified
+  verified
+}
+
+enum DealStatus {
+  in_progress
+  completed
+  declined
 }
