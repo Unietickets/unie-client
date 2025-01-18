@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-const EventsList = ({ events }) => {
+export const EventsList = ({ events }) => {
     return (
         <table>
             <thead>
@@ -38,5 +38,3 @@ const EventsList = ({ events }) => {
         </table>
     );
 };
-
-export default EventsList;

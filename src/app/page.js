@@ -1,4 +1,4 @@
-import { Session } from "./components/Session";
+import { Session } from "@core/components/business";
 
 export default function Home() {
   return (

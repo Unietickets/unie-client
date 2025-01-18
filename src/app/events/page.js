@@ -1,5 +1,5 @@
-import EventsList from "@/app/components/business/EventsList";
-import { fetchEvents } from "@/app/lib/api";
+import { EventsList } from "@core/components/business";
+import { fetchEvents } from "@core/lib/api";
 
 export default async function Events() {
   const events = await fetchEvents();

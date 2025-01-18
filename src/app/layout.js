@@ -1,8 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import Link from "next/link";
-import AuthProvider from "./AuthProvider";
-import SeedMock from "./components/business/SeedMock";
+
+import { AuthProvider, SeedMock } from "@core/components/business";
+
+import "./globals.css";
 
 
 const geistSans = Geist({
