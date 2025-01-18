@@ -7,6 +7,7 @@ import { useState } from 'react';
 export function RegisterForm() {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
@@ -17,7 +18,7 @@ export function RegisterForm() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, name }),
     });
     
     const data = await res.json();
@@ -50,6 +51,13 @@ export function RegisterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
+        required
+      />
+      <input
+        type="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        placeholder="Name"
         required
       />
       <input

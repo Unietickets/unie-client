@@ -23,15 +23,12 @@ export const authOptions = {
                 const { email, password } = credentials;
 
                 if (!email || !password) {
-                    console.log('1')
                     return null;
                 }
 
                 const user = await prisma.user.findUnique({
                     where: { email },
                 });
-
-                console.log(user)
                 
                 if (user && (await bcrypt.compare(password, user.password))) {
                     const { password, ...userWithoutPass } = user;
