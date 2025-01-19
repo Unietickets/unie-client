@@ -1,9 +1,9 @@
-import { Session } from "@core/components/business";
+import { SessionStatus } from "@core/components/business";
 
 export default function Home() {
   return (
     <div>
-      <Session />
+      <SessionStatus />
     </div>
   );
 }

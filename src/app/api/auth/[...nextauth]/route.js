@@ -5,6 +5,15 @@ import bcrypt from 'bcryptjs';
 import { prisma } from "@core/lib/prisma";
 
 export const authOptions = {
+    callbacks: {
+        async session({ session, user }) {
+            // console.log(s)
+            // session.accessToken = token.accessToken
+            session.user.id = user.id
+            
+            return session
+        }
+    },
     providers: [
         Credentials({
             credentials: {
@@ -29,7 +38,7 @@ export const authOptions = {
                 const user = await prisma.user.findUnique({
                     where: { email },
                 });
-                
+
                 if (user && (await bcrypt.compare(password, user.password))) {
                     const { password, ...userWithoutPass } = user;
 

@@ -4,7 +4,9 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import React from 'react';
 
-export const Session = () => {
+import { ROUTES } from "@core/constants";
+
+export const SessionStatus = () => {
     const session = useSession();
 
     return (
@@ -13,7 +15,7 @@ export const Session = () => {
           {session.status === 'authenticated' ? (
             <button onClick={() => signOut()}>Выйти</button>
           ) : (
-            <Link href="api/auth/signin">Войти</Link>
+            <Link href={ROUTES.signIn.href}>Войти</Link>
           )}
         </div>
     )
