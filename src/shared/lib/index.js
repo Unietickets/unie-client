@@ -1,0 +1,1 @@
+export { getTypographyStyles } from './getTypographyStyles';
