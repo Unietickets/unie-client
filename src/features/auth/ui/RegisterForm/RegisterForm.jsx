@@ -1,12 +1,15 @@
 'use client'
 
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import { register } from '../services';
+import { Input } from '@/shared/ui';
 import { ROUTES } from '@core/routes';
+
+import authService from '../../services';
+
+import * as S from './RegisterForm.styles';
 
 export function RegisterForm() {
   const router = useRouter();
@@ -18,7 +21,7 @@ export function RegisterForm() {
     e.preventDefault();
     
     try {
-      const data = await register({ email, password, name });
+      const data = await authService.register({ email, password, name });
 
       const signInResponse = await signIn('credentials', {
         email,
@@ -40,55 +43,57 @@ export function RegisterForm() {
   };
 
   return (
-    <form 
+    <S.Form 
       onSubmit={handleSubmit} 
-      className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
     >
-      <h2 className="text-2xl font-bold mb-6 text-center text-gray-500">Register</h2>
+      <S.Info>
+        <S.Title>Register form</S.Title>
+        <S.SubTitle>Fill out all the fields and join our community</S.SubTitle>
+      </S.Info>
       
-      <input
+      <Input
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         required
-        className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
       />
       
-      <input
+      <Input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Name"
         required
-        className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
       />
       
-      <input
+      <Input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
-        className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-500"
       />
       
-      <button 
+      <S.Button
+        variant='primary' 
+        size='medium'
+        isRounded
         type="submit" 
-        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+        fullWidth={false}
       >
         Register
-      </button>
+      </S.Button>
       
-      <span className="block text-center mt-4 text-gray-500">
+      <span>
         Already have an account?&nbsp;
-        <Link 
+        <S.MyLink 
           href={ROUTES.signIn.href} 
           className="text-blue-500 hover:underline"
         >
           Sign in
-        </Link>
+        </S.MyLink>
       </span>
-    </form>
+    </S.Form>
   );
 }
