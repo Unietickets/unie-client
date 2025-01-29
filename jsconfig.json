@@ -2,7 +2,10 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "@core/*": ["./src/app/core/*"]
+      "@core/*": ["./src/core/*"],
+      "@features/*": ["./src/features/*"],
+      "@entities/*": ["./src/entities/*"],
+      "@shared/*": ["./src/shared/*"],
     }
   }
 }

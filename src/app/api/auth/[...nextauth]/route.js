@@ -1,57 +1,63 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 
-import { prisma } from "@core/lib/prisma";
+import { prisma } from "@shared/lib/db";
 
 export const authOptions = {
-    callbacks: {
-        async session({ session, user }) {
-            // console.log(s)
-            // session.accessToken = token.accessToken
-            session.user.id = user.id
-            
-            return session
-        }
+  callbacks: {
+    async session({ session, user }) {
+      // console.log(s)
+      // session.accessToken = token.accessToken
+    //   session.user.id = user.id;
+    console.log(session)
+    console.log(user)
+
+      return session;
     },
-    providers: [
-        Credentials({
-            credentials: {
-                email: {
-                    label: 'email',
-                    type: 'email',
-                    required: true,
-                },
-                password: {
-                    label: 'password',
-                    type: 'password',
-                    required: true,
-                }
-            },
-            async authorize(credentials) {
-                const { email, password } = credentials;
+  },
+  providers: [
+    Credentials({
+      credentials: {
+        email: {
+          label: "email",
+          type: "email",
+          required: true,
+        },
+        password: {
+          label: "password",
+          type: "password",
+          required: true,
+        },
+      },
+      async authorize(credentials) {
+        try {
+          const { email, password } = credentials;
 
-                if (!email || !password) {
-                    return null;
-                }
+          if (!email || !password) {
+            return null;
+          }
 
-                const user = await prisma.user.findUnique({
-                    where: { email },
-                });
+          const user = await prisma.user.findUnique({
+            where: { email },
+          });
 
-                if (user && (await bcrypt.compare(password, user.password))) {
-                    const { password, ...userWithoutPass } = user;
+          if (user && (await bcrypt.compare(password, user.password))) {
+            const { password, ...userWithoutPass } = user;
 
-                    return userWithoutPass;
-                } 
-                
-                return null;
-            }
-        }),
-    ],
-    secret: process.env.NEXTAUTH_SECRET,
-}
+            return userWithoutPass;
+          }
+
+          return null;
+        } catch (e) {
+          return e;
+        }
+      },
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+};
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST } 
+export { handler as GET, handler as POST };
