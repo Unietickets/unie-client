@@ -1,11 +1,11 @@
-const Variant = {
+export const TYPOGRAPHY = {
     h1: 'h1',
-    h1: 'h2',
-    h1: 'h3',
-    h1: 'h4',
+    h2: 'h2',
+    h3: 'h3',
+    h4: 'h4',
     body: 'body',
     body2: 'body2',
-    caption1: 'caption1',
+    caption: 'caption',
     caption2: 'caption2',
     caption3: 'caption3'
 };
@@ -63,7 +63,7 @@ export const getTypographyStyles = (variant) => {
     case 'caption':
       return `
         font-style: normal;
-        font-weight: 500;
+        font-weight: 600;
         font-size: 16px;
         line-height: 24px;
       `;

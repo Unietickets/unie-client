@@ -1,1 +1,1 @@
-export { getTypographyStyles } from './getTypographyStyles';
+export { TYPOGRAPHY, getTypographyStyles } from './getTypographyStyles';
