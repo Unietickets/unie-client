@@ -12,6 +12,7 @@
     "@adobe/react-spectrum": "3.39.0",
     "@prisma/client": "6.1.0",
     "bcryptjs": "2.4.3",
+    "eslint-import-resolver-alias": "1.1.2",
     "jsonwebtoken": "9.0.2",
     "next": "15.1.6",
     "next-auth": "4.24.11",
@@ -19,7 +20,8 @@
     "prisma": "6.1.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "styled-components": "6.1.14"
+    "styled-components": "6.1.14",
+    "usehooks-ts": "3.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3",
