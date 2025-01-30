@@ -82,7 +82,8 @@ export const Colors = {
     GreyShingle: '#949494',
     Dull: '#727272',
     Mako: '#515454',
+    SanAntonioSage: '#2E2E2E',
     Black: '#000000',
-  
+
     Transparent: 'transparent',
   }

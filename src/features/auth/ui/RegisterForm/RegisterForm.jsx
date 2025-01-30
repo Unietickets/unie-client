@@ -19,14 +19,14 @@ export function RegisterForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const data = await authService.register({ email, password, name });
 
       const signInResponse = await signIn('credentials', {
         email,
         password,
-        redirect: false, 
+        redirect: false,
       });
 
       if (signInResponse?.error) {
@@ -39,18 +39,18 @@ export function RegisterForm() {
       console.error(data || 'Register failed');
       alert(data || 'Register failed');
     }
-    
+
   };
 
   return (
-    <S.Form 
-      onSubmit={handleSubmit} 
+    <S.Form
+      onSubmit={handleSubmit}
     >
       <S.Info>
         <S.Title>Register form</S.Title>
         <S.SubTitle>Fill out all the fields and join our community</S.SubTitle>
       </S.Info>
-      
+
       <Input
         type="email"
         value={email}
@@ -58,7 +58,7 @@ export function RegisterForm() {
         placeholder="Email"
         required
       />
-      
+
       <Input
         type="text"
         value={name}
@@ -66,7 +66,7 @@ export function RegisterForm() {
         placeholder="Name"
         required
       />
-      
+
       <Input
         type="password"
         value={password}
@@ -74,22 +74,21 @@ export function RegisterForm() {
         placeholder="Password"
         required
       />
-      
+
       <S.Button
-        variant='primary' 
+        variant='primary'
         size='medium'
         isRounded
-        type="submit" 
+        type="submit"
         fullWidth={false}
       >
         Register
       </S.Button>
-      
+
       <span>
         Already have an account?&nbsp;
-        <S.MyLink 
-          href={ROUTES.signIn.href} 
-          className="text-blue-500 hover:underline"
+        <S.MyLink
+          href={ROUTES.signIn.href}
         >
           Sign in
         </S.MyLink>

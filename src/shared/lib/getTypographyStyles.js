@@ -1,13 +1,8 @@
 export const TYPOGRAPHY = {
     h1: 'h1',
     h2: 'h2',
-    h3: 'h3',
-    h4: 'h4',
     body: 'body',
     body2: 'body2',
-    caption: 'caption',
-    caption2: 'caption2',
-    caption3: 'caption3'
 };
 
 export const getTypographyStyles = (variant) => {
@@ -16,72 +11,33 @@ export const getTypographyStyles = (variant) => {
       return `
         font-style: normal;
         font-weight: 700;
-        font-size: 48px;
-        line-height: 48px;
+        font-size: 32px;
+        line-height: 40px;
       `;
 
     case 'h2':
       return `
         font-style: normal;
         font-weight: 600;
-        font-size: 42px;
-        line-height: 42px;
+        font-size: 24px;
+        line-height: 32px;
       `;
 
-    case 'h3':
-      return `
-        font-style: normal;
-        font-weight: 500;
-        font-size: 30px;
-        line-height: 39px;
-      `;
-
-    case 'h4':
-      return `
-        font-style: normal;
-        font-weight: 600;
-        font-size: 32px;
-        line-height: 35px;
-      `;
 
     case 'body':
       return `
         font-style: normal;
         font-weight: 400;
-        font-size: 24px;
-        line-height: 34px;
+        font-size: 16px;
+        line-height: 22px;
       `;
 
     case 'body2':
       return `
         font-style: normal;
         font-weight: 400;
-        font-size: 22px;
-        line-height: 31px;
-      `;
-
-    case 'caption':
-      return `
-        font-style: normal;
-        font-weight: 600;
-        font-size: 16px;
-        line-height: 24px;
-      `;
-
-    case 'caption2':
-      return `
-        font-style: normal;
-        font-weight: 400;
-        font-size: 16px;
-        line-height: 26px;
-      `;
-
-    case 'caption3':
-      return `
-        font-style: normal;
-        font-weight: 500;
-        font-size: 13px;
-        line-height: 21px;
+        font-size: 14px;
+        line-height: 18px;
       `;
 
     default:

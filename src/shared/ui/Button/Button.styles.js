@@ -2,8 +2,8 @@
 
 import styled, { css } from 'styled-components';
 
-import { Colors } from '@/shared/constants';
-import { getTypographyStyles, TYPOGRAPHY } from '@/shared/lib';
+import { TYPOGRAPHY, getTypographyStyles } from '@shared/lib';
+import { Colors } from '@shared/constants';
 
 
 const BaseDisabledButtonMixin = css`
