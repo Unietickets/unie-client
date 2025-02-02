@@ -3,16 +3,19 @@
 import { useSession } from 'next-auth/react';
 import React from 'react';
 
-export const UserInfo = () => {
-    const session = useSession();
+// import userService from '../services';
 
-    // console.log(session);
+export const UserInfo = ({ email, name }) => {
+    const { data } = useSession();
 
-    // const userData = await fetchUserData();
+    // const userInfo = userService.getUserByEmail({ email: data?.user?.email });
+
+    console.log(session);
 
     return (
         <div>
-            
+          email: {email}
+          name: {name}
         </div>
     );
 };

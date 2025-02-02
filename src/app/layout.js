@@ -1,18 +1,20 @@
 import React from 'react';
-import { Geist, Geist_Mono } from "next/font/google";
+import { Raleway } from "next/font/google";
 
 import "./globals.css";
 
 import { Container, Header } from "@shared/ui";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const raleWaySans = Raleway({
+  variable: "--font-raleway-sans",
   subsets: ["latin"],
+  weight: ['400', '500', '600']
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const raleWayMono = Raleway({
+  variable: "--font-raleway-mono",
   subsets: ["latin"],
+  weight: ['400', '500', '600']
 });
 
 export const metadata = {
@@ -24,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ru">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${raleWaySans.variable} ${raleWayMono.variable} antialiased`}
       >
         <Container>
           <Header />

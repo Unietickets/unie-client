@@ -16,6 +16,12 @@ export const authOptions = {
       return session;
     },
   },
+  // ломает приложение
+  // pages: {
+  //   signIn: '/auth/sign-in',
+  //   error: '/auth/error',
+  //   signUp: '/auth/sign-up'
+  // },
   providers: [
     Credentials({
       credentials: {

@@ -15,28 +15,18 @@ const eslintConfig = [...compat.extends(
   "plugin:react/recommended",
 ), {
   "rules": {
-    "comma-dangle": "off",
+    // React rules
+    "react/react-in-jsx-scope": "off",
     "react/jsx-props-no-spreading": "off",
     "react/require-default-props": "off",
-    "import/prefer-default-export": "off",
+    "react/prop-types": "off",
     "react/function-component-definition": [
       "error",
       {
         "namedComponents": "arrow-function"
       }
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        "devDependencies": true
-      }
-    ],
-    // https://github.com/iamturns/eslint-config-airbnb-typescript#why-is-importno-unresolved-disabled
-    "import/no-unresolved": "error",
-    "react/jsx-first-prop-new-line": [
-      2,
-      "multiline"
-    ],
+    "react/jsx-first-prop-new-line": [2, "multiline"],
     "react/jsx-max-props-per-line": [
       2,
       {
@@ -44,40 +34,67 @@ const eslintConfig = [...compat.extends(
         "when": "multiline"
       }
     ],
-    "implicit-arrow-linebreak": "off",
-    "function-paren-newline": "off",
+
+    // Import rules
+    "import/prefer-default-export": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "import/no-unresolved": "error",
     "import/order": [
       "error",
       {
         "groups": [["builtin"], ["external"], ["internal"], ["parent"], ["sibling"], ["index"]],
-        "newlines-between": "always"
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
       }
     ],
+
+    // General rules
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never"
+    }],
+    "implicit-arrow-linebreak": "off",
+    "function-paren-newline": "off",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
     "sort-imports": [
       "error",
       {
         "memberSyntaxSortOrder": ["none", "multiple", "single", "all"],
         "allowSeparatedGroups": true
       }
-    ],
-    "react/prop-types": "off"
+    ]
   },
   "settings": {
     "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true,
-        "project": "./tsconfig.json"
-      },
       "alias": {
         "map": [
-          ["@shared", "./src/shared"] // Укажите правильный путь к вашим алиасам
+          ["@core", "./src/core"],
+          ["@shared", "./src/shared"],
+          ["@entities", "./src/entities"],
+          ["@features", "./src/features"]
         ],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"] // Укажите расширения файлов, которые вы используете
-      },
-      "react": {
-        "version": "detect"
+        "extensions": [".js", ".jsx"]
       }
+    },
+    "react": {
+      "version": "detect"
     }
+  },
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
   }
 }];
 

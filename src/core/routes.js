@@ -16,11 +16,11 @@ export const ROUTES = {
         label: 'Deposit'
     },
     signUp: {
-        href: '/auth/signup',
+        href: '/auth/sign-up',
         label: 'Sign Up'
     },
     signIn: {
-        href: '/api/auth/signin',
+        href: '/auth/sign-in',
         label: 'Sign In'
     },
 }

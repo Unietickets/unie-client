@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Colors } from "@shared/constants";
 
-import { TYPOGRAPHY, getTypographyStyles } from "@/shared/lib";
+import { TYPOGRAPHY, getTypographyStyles } from "@shared/lib";
 
 export const Wrapper = styled.nav`
   position: absolute;
