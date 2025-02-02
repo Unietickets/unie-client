@@ -1,4 +1,8 @@
 export const ROUTES = {
+    home: {
+      href: '/',
+      label: 'Home'
+    },
     profile: {
         href: '/profile',
         label: 'Profile'

@@ -22,6 +22,8 @@ export const Wrapper = styled.nav`
   padding-left: 28px;
 
   background-color: ${Colors.SanAntonioSage};
+
+  z-index: 10;
 `;
 
 export const TextLogo = styled.span`

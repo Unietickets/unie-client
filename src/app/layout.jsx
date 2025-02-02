@@ -1,9 +1,12 @@
 import React from 'react';
 import { Raleway } from "next/font/google";
 
-import "./globals.css";
-
 import { Container, Header } from "@shared/ui";
+
+import { Providers } from './providers'
+import StyledComponentsRegistry from './registry'
+
+import "./globals.css";
 
 const raleWaySans = Raleway({
   variable: "--font-raleway-sans",
@@ -25,13 +28,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ru">
-      <body
-        className={`${raleWaySans.variable} ${raleWayMono.variable} antialiased`}
-      >
-        <Container>
-          <Header />
-          {children}
-        </Container>
+      <body className={`${raleWaySans.variable} ${raleWayMono.variable} antialiased`}>
+        <StyledComponentsRegistry>
+          <Providers>
+            <Container>
+              <Header />
+            </Container>
+            {children}
+          </Providers>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
