@@ -21,7 +21,10 @@ export const Wrapper = styled.nav`
   padding-top: 84px;
   padding-left: 28px;
 
-  background-color: ${Colors.SanAntonioSage};
+  backdrop-filter: blur(26px);
+  background: rgba(103, 103, 103, .1);
+  border-right: 1px solid ${Colors.Dull};
+  border-radius: 0 16px 16px 0;
 
   z-index: 10;
 `;
