@@ -1,1 +1,1 @@
-export { getEvents } from './getEvents';
+export { eventService } from './getEvents';

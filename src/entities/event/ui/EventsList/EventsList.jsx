@@ -1,10 +1,10 @@
 import Link from "next/link";
 import React from "react";
 
-import { getEvents } from "../../services";
+import { eventService } from "../../services";
 
 export const EventsList = async () => {
-  const events = await getEvents();
+  const events = await eventService.getAllEvents();
 
   return (
     <table>
