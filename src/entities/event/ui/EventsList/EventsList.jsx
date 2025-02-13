@@ -1,6 +1,8 @@
 import Link from "next/link";
 import React from "react";
 
+import { ROUTES } from "@/core/routes";
+
 import { eventService } from "../../services";
 
 export const EventsList = async () => {
@@ -19,9 +21,12 @@ export const EventsList = async () => {
       </thead>
       <tbody>
         {events?.map?.((event) => (
-          <tr key={event.event_id}>
+          <tr key={event.id}>
             <td>
-              <Link href={`events/${event.id}`}>{event.name}</Link>
+              <Link href={{
+                pathname: `${ROUTES.events.href}/[id]`,
+                query: { id: event.id }
+              }}>{event.name}</Link>
             </td>
             <td>{event.genre}</td>
             <td>{event.location}</td>

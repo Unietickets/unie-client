@@ -1,21 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
+import { useSession } from "next-auth/react";
 
-import { ROUTES } from "@core/routes";
+import { AUTHORIZED_ROUTES, PUBLIC_ROUTES } from "@core/routes";
 
 import { Portal } from "../Portal";
 import { Menu } from "../Icons";
 
 import * as S from "./Burger.styles";
 
-const routes = Object.values(ROUTES);
-
 export const Burger = () => {
+  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null)
+
+  const routes = useMemo(() => {
+    if (status === "authenticated") {
+      return AUTHORIZED_ROUTES;
+    }
+
+    return PUBLIC_ROUTES;
+  }, [status]);
 
   const handleClickOutside = () => {
     setIsOpen(false);

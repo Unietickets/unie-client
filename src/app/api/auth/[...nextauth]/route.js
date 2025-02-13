@@ -10,8 +10,8 @@ export const authOptions = {
       // console.log(s)
       // session.accessToken = token.accessToken
     //   session.user.id = user.id;
-    console.log(session)
-    console.log(user)
+    // console.log(session)
+    // console.log(user)
 
       return session;
     },
