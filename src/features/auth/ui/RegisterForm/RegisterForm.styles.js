@@ -5,7 +5,6 @@ import styled from "styled-components"
 
 import { TYPOGRAPHY, getTypographyStyles } from "@shared/lib";
 import { Button as BaseButton } from "@shared/ui";
-import { Colors } from "@shared/constants";
 
 export const Form = styled.form`
     display: flex;
@@ -26,18 +25,23 @@ export const Info = styled.div`
 export const Title = styled.span`
     ${getTypographyStyles(TYPOGRAPHY.h2)};
     font-size: 24px;
-    color: ${Colors.Doctor};
+    color: ${({ theme }) => theme.text.primary};
 `;
 
 export const SubTitle = styled.span`
     ${getTypographyStyles(TYPOGRAPHY.body)};
-    color: ${Colors.Palladium};
+    color: ${({ theme }) => theme.text.secondary};
 `;
 
 export const Button = styled(BaseButton)`
     margin-top: 48px;
 `;
 
+export const Caption = styled.span`
+  ${getTypographyStyles(TYPOGRAPHY.body)};
+  color: ${({ theme }) => theme.text.primary};
+`;
+
 export const MyLink = styled(Link)`
-    color: ${Colors.FluorescentOrange};
+    color: ${({ theme }) => theme.primary};
 `;

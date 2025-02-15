@@ -1,15 +1,26 @@
 import { Colors } from "@/shared/constants";
 
-export const theme = {
-  colors: {
-    primary: Colors.FluorescentOrange,
-    secondary: Colors.UclaGold,
-    surface: Colors.White,
-    background: Colors.Doctor,
-    text: {
-      primary: Colors.Doctor,
-      secondary: Colors.Mako,
-    },
-    border: Colors.Doctor,
+const darkTheme = {
+  primary: Colors.FluorescentOrange,
+  secondary: Colors.UclaGold,
+  text: {
+    primary: Colors.Doctor,
+    secondary: Colors.Mako,
   },
+  border: Colors.Doctor,
 };
+
+const lightTheme = {
+  primary: Colors.FluorescentOrange,
+  secondary: Colors.UclaGold,
+  text: {
+    primary: Colors.Black,
+    secondary: Colors.Carbon,
+  },
+  border: Colors.Doctor,
+};
+
+export const theme = {
+  light: lightTheme,
+  dark: darkTheme,
+}

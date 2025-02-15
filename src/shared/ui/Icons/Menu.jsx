@@ -1,6 +1,7 @@
+import { Colors } from "@/shared/constants";
 import React from "react";
 
-export const Menu = ({ width = 32, height = 32, color = '#DCC236', ...rest }) => {
+export const Menu = ({ width = 32, height = 32, color = Colors.FluorescentOrange, ...rest }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 32 32" fill="none" {...rest}>
       <path d="M0 7.33333C0 13.3723 1.29433 14.6667 7.33333 14.6667C13.3723 14.6667 14.6667 13.3723 14.6667 7.33333C14.6667 1.29433 13.3723 0 7.33333 0C1.29433 0 0 1.29433 0 7.33333Z" fill={color} />

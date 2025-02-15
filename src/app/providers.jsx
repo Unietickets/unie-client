@@ -2,11 +2,14 @@
 
 import { SessionProvider } from 'next-auth/react';
 import { ThemeProvider } from 'styled-components';
-import { theme } from '@shared/theme';
+
+import { useTheme } from '@shared/lib';
 
 export function Providers({ children }) {
+  const currentTheme = useTheme();
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={currentTheme}>
       <SessionProvider>{children}</SessionProvider>
     </ThemeProvider>
   )

@@ -47,10 +47,10 @@ export function LoginForm() {
         Login
       </S.Button>
 
-      <span>
+      <S.Caption>
         Don't have an account?&nbsp;
         <S.MyLink href={ROUTES.signUp.href}>Sign up</S.MyLink>
-      </span>
+      </S.Caption>
     </S.Form>
   );
 }

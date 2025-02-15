@@ -58,14 +58,14 @@ export function RegisterForm() {
         Register
       </S.Button>
 
-      <span>
+      <S.Caption>
         Already have an account?&nbsp;
         <S.MyLink
           href={ROUTES.signIn.href}
         >
           Sign in
         </S.MyLink>
-      </span>
+      </S.Caption>
     </S.Form>
   );
 }

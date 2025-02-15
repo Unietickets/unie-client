@@ -17,7 +17,7 @@ export const StyledEventCard = styled.div`
   width: 200px;
   margin-top: 4px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  background: ${({ theme }) => theme.colors.surface};
+  background: ${({ theme }) => theme.surface};
 
   border-radius: ${BORDER_RADIUS};
 
@@ -68,9 +68,9 @@ export const MetadataItem = styled.div`
   border-radius: 30px;
 
   background: ${({ accent, theme }) => {
-    if (accent) return theme.colors.secondary;
+    if (accent) return theme.secondary;
 
-    return theme.colors.primary;
+    return theme.primary;
   }};
 `;
 

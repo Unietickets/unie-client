@@ -48,11 +48,11 @@ export const TextWrapper = styled.div`
 export const Title = styled.span`
   ${getTypographyStyles(TYPOGRAPHY.h2)};
 
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.text.primary};
 `;
 
 export const Description = styled.span`
   ${getTypographyStyles(TYPOGRAPHY.body)};
 
-  color: ${({ theme }) => theme.colors.text.primary};
+  color: ${({ theme }) => theme.text.secondary};
 `;

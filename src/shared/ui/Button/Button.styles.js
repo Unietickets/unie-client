@@ -22,7 +22,7 @@ const BaseDisabledButtonMixin = css`
 
 const ButtonVariants = {
   primary: css`
-    background-color: ${Colors.FluorescentOrange};
+    background-color: ${({ theme }) => theme.primary};
 
     color: ${Colors.Black};
 
@@ -51,7 +51,7 @@ const ButtonVariants = {
     }
   `,
   secondary: css`
-    background-color: ${Colors.White};
+    background-color: ${({ theme }) => theme.secondary};
     color: ${Colors.Dull};
     border: 2px solid ${Colors.Dull};
 
