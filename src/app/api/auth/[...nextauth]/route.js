@@ -10,9 +10,9 @@ export const authOptions = {
     async session({ session, user }) {
       // console.log(s)
       // session.accessToken = token.accessToken
-    //   session.user.id = user.id;
-    // console.log(session)
-    // console.log(user)
+      //   session.user.id = user.id;
+      // console.log(session)
+      // console.log(user)
 
       return session;
     },

@@ -37,8 +37,6 @@ export default async function Home() {
   const musicEventsWithImages = musicEvents.map(mapMockImages);
   const sportEventsWithImages = sportEvents.map(mapMockImages)
 
-  console.log(recommendedEventsWithImages, artEventsWithImages, musicEventsWithImages, sportEventsWithImages)
-
   return (
     <main>
       <Styles.Section>
