@@ -1,14 +1,15 @@
-'use client'
+'use client';
 
-import React from 'react';
+import React from "react";
 
-import { Container } from '@shared/ui';
-import { AuthProvider } from '@features/auth/ui';
+import { useAuth } from "@shared/lib";
 
 export default function Layout({ children }) {
+  const AuthWrapper = useAuth();
+
   return (
-        <AuthProvider>
-          <Container>{children}</Container>
-        </AuthProvider>
-    );
-};
+    <AuthWrapper>
+      {children}
+    </AuthWrapper>
+  );
+}

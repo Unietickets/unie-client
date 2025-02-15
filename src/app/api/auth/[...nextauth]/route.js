@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@shared/lib/db";
+import { ROUTES } from "@/core/routes";
 
 export const authOptions = {
   callbacks: {
@@ -10,18 +11,18 @@ export const authOptions = {
       // console.log(s)
       // session.accessToken = token.accessToken
     //   session.user.id = user.id;
-    console.log(session)
-    console.log(user)
+    // console.log(session)
+    // console.log(user)
 
       return session;
     },
   },
-  // ломает приложение
-  // pages: {
-  //   signIn: '/auth/sign-in',
-  //   error: '/auth/error',
-  //   signUp: '/auth/sign-up'
-  // },
+  pages: {
+    signIn: ROUTES.signIn.href,
+    signUp: ROUTES.signUp.href,
+    profile: ROUTES.profile.href,
+    // error: '/auth/error',
+  },
   providers: [
     Credentials({
       credentials: {
