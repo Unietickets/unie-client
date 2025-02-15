@@ -1,5 +1,3 @@
-'use client';
-
 import { LogoutButton } from "@features/auth";
 
 import * as S from './styles';
