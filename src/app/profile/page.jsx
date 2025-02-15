@@ -1,14 +1,17 @@
+import { UserInfo } from "@/entities/user";
+import userService from "@/entities/user/services";
 import { LogoutButton } from "@features/auth";
 
 import * as S from './styles';
 
-export default function Profile() {
+export default async function Profile() {
+  const user = await userService.getUserInfoBySession();
+
   return (
-    <div className="flex flex-col gap-4 items-start p-4">
-      <h1 className="text-2xl font-bold">Профиль</h1>
-      <S.Wrapper>
-        <LogoutButton />
-      </S.Wrapper>
-    </div>
+    <S.Wrapper>
+      <h1 className="text-2xl font-bold">Profile</h1>
+      <UserInfo user={user} />
+      <LogoutButton />
+    </S.Wrapper>
   );
 }
