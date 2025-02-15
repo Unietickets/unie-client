@@ -7,7 +7,7 @@ const darkTheme = {
     primary: Colors.Doctor,
     secondary: Colors.Mako,
   },
-  border: Colors.Doctor,
+  border: Colors.Mako,
 };
 
 const lightTheme = {

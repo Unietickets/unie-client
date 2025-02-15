@@ -1,15 +1,26 @@
+import {
+  ArrowUpIcon,
+  QuestionIcon,
+  ReceiptIcon,
+  SackDollarIcon,
+  UserHeadsetIcon,
+  UserIcon
+} from "@/shared/ui";
+
 export const ROUTES = {
   home: {
     href: '/',
     label: 'Home'
   },
   profile: {
-      href: '/profile',
-      label: 'Profile'
+    Icon: UserIcon,
+    href: '/profile',
+    label: 'My account'
   },
   events: {
-      href: '/events',
-      label: 'Events'
+    Icon: ArrowUpIcon,
+    href: '/events',
+    label: 'Events'
   },
 //   event: {
 //     href: '/events/[id]',
@@ -31,12 +42,37 @@ export const ROUTES = {
       href: '/auth/sign-in',
       label: 'Sign In'
   },
+  tickets: {
+    href: '/tickets',
+    label: 'Tickets',
+    ownList: {
+      Icon: ReceiptIcon,
+      href: '/tickets/own',
+      label: 'My tickets'
+    },
+    create: {
+      Icon: SackDollarIcon,
+      href: '/tickets/create',
+      label: 'Cell tickets'
+    }
+  },
+  support: {
+    Icon: UserHeadsetIcon,
+    href: '/support',
+    label: 'Support'
+  },
+  FAQ: {
+    Icon: QuestionIcon,
+    href: '/FAQ',
+    label: 'FAQ'
+  }
 }
 
 export const PROTECTED_ROUTES = [
   ROUTES.profile,
   ROUTES.deposit,
-  ROUTES.withdraw
+  ROUTES.withdraw,
+  ROUTES.tickets.ownList,
 ];
 
 export const PUBLIC_ROUTES = [
@@ -44,6 +80,9 @@ export const PUBLIC_ROUTES = [
   ROUTES.signIn,
   ROUTES.signUp,
   ROUTES.events,
+  ROUTES.tickets.create,
+  ROUTES.support,
+  ROUTES.FAQ,
   // ROUTES.event,
 ];
 

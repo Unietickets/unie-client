@@ -2,8 +2,6 @@
 
 import styled from "styled-components";
 
-import { Colors } from "@shared/constants";
-
 import { TYPOGRAPHY, getTypographyStyles } from "@shared/lib";
 
 export const Wrapper = styled.nav`
@@ -18,7 +16,7 @@ export const Wrapper = styled.nav`
   width: 70%;
   min-width: 270px;
   height: 100%;
-  padding-top: 84px;
+  padding-top: 32px;
   padding-left: 28px;
 
   backdrop-filter: blur(26px);
@@ -35,6 +33,7 @@ export const TextLogo = styled.span`
 
 export const Menu = styled.ul`
   padding: 0;
+  width: 80%;
 
   display: flex;
   flex-direction: column;
@@ -44,5 +43,30 @@ export const Menu = styled.ul`
 export const MenuItem = styled.li`
   list-style: none;
 
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   ${getTypographyStyles(TYPOGRAPHY.body)};
+`;
+
+export const Caption = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 14px;
+
+  color: ${({ theme }) => theme.text.secondary};
+
+  &::after {
+    content: '';
+
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: ${({ theme }) => theme.border};
+  }
 `;
