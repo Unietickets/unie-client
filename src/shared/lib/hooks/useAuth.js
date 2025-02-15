@@ -19,12 +19,10 @@ export const useAuth = () => {
 
   const AuthWrapper = ({ children }) => (
     <Container>
-      {status === "unauthenticated" && (
+      {status === "loading" && (
         <p>Loading...</p>
       )}
-      {status === "authenticated" && (
-        {children}
-      )}
+      {status === "authenticated" && children}
     </Container>
   );
 
