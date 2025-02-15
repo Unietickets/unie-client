@@ -1,7 +1,9 @@
-import { getTickets } from './getTickets';
+import { ticketRepository } from "../repositories"
 
-const ticketService = {
-    getTickets,
+class TicketService {
+  async getEventTickets({ eventId }) {
+    return ticketRepository.getTicketsByEventId(eventId);
+  }
 };
 
-export default ticketService;
+export const ticketService = new TicketService();

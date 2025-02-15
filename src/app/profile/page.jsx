@@ -1,5 +1,4 @@
-import { UserInfo } from "@/entities/user";
-import userService from "@/entities/user/services";
+import { userService, UserInfo } from "@/entities/user";
 import { LogoutButton } from "@features/auth";
 
 import * as S from './styles';

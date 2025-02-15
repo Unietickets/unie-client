@@ -2,7 +2,7 @@
 
 import { ROUTES } from "@/core/routes";
 
-import authService from "../../services";
+import { authService } from "../../services";
 
 export async function createUserAction(_, formData) {
   const email = formData.get('email');

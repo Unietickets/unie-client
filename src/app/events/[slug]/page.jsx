@@ -1,6 +1,6 @@
-import { eventService, FullInfo } from "@/entities/event";
-import userService from "@entities/user/services";
-import ticketService from "@entities/ticket/services";
+import { eventService, FullInfo } from "@entities/event";
+import { userService } from "@entities/user";
+import { ticketService } from "@entities/ticket";
 
 const mapMockImages = (event) => ({
   id: event.id,
@@ -42,7 +42,7 @@ export default async function Event({
 }) {
   const slug = (await params).slug;
   const event = await eventService.getEventById(Number(slug));
-  const tickets = await ticketService.getTickets({ id: Number(slug) });
+  const tickets = await ticketService.getEventTickets(Number(slug));
 
   return (
     <div>
