@@ -1,7 +1,9 @@
 import React from "react";
 
-import { Container } from "@shared/ui";
+import { useAuth } from "@shared/lib";
 
 export default function BalanceLayout({ children }) {
-  return <Container>{children}</Container>;
+  const AuthWrapper = useAuth();
+
+  return <AuthWrapper>{children}</AuthWrapper>;
 }
