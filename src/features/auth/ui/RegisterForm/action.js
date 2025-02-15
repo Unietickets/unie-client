@@ -1,5 +1,7 @@
 'use server'
 
+import { ROUTES } from "@/core/routes";
+
 import authService from "../../services";
 
 export async function createUserAction(_, formData) {
@@ -13,5 +15,5 @@ export async function createUserAction(_, formData) {
     return { message: 'Please enter a valid email' }
   }
 
-  redirect('/dashboard')
+  redirect(ROUTES.signIn.href);
 }

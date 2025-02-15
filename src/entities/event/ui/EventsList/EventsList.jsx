@@ -23,10 +23,7 @@ export const EventsList = async () => {
         {events?.map?.((event) => (
           <tr key={event.id}>
             <td>
-              <Link href={{
-                pathname: `${ROUTES.events.href}/[id]`,
-                query: { id: event.id }
-              }}>{event.name}</Link>
+              <Link href={`${ROUTES.events.href}/${event.id}`}>{event.name}</Link>
             </td>
             <td>{event.genre}</td>
             <td>{event.location}</td>
