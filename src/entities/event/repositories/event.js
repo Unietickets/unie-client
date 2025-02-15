@@ -1,6 +1,14 @@
 import { prisma } from "@/shared/lib/db";
 
 export class EventRepository {
+  async getEventById(id) {
+    return prisma.event.findUnique({
+      where: {
+        id: id
+      }
+    });
+  }
+
   async getAllEvents() {
     return await prisma.event.findMany();
   }

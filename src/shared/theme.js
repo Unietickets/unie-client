@@ -7,7 +7,7 @@ export const theme = {
     surface: Colors.White,
     background: Colors.Doctor,
     text: {
-      primary: Colors.Carbon,
+      primary: Colors.Doctor,
       secondary: Colors.Mako,
     },
     border: Colors.Doctor,

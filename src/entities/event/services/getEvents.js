@@ -31,6 +31,10 @@ class EventService {
   async getSportEvents(limit) {
     return this.getEventsByGenre('Sports', limit);
   }
+
+  async getEventById(id) {
+    return eventRepository.getEventById(id);
+  }
 }
 
 export const eventService = new EventService();

@@ -1,5 +1,30 @@
-import ticketService from "@entities/ticket/services";
+import { eventService, FullInfo } from "@/entities/event";
 import userService from "@entities/user/services";
+import ticketService from "@entities/ticket/services";
+
+const mapMockImages = (event) => ({
+  id: event.id,
+  image: "/images/events.jpg",
+  title: event.name,
+  venue: event.location,
+  link: `/events/${event.id}`,
+  metadata: [
+    {
+      name: "time",
+      value: new Date(event.event_date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
+    },
+    {
+      name: "date",
+      value: new Date(event.event_date).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' })
+    },
+    {
+      accent: true,
+      name: "location",
+      value: event.location?.split(',')[0] || 'Unknown'
+    }
+  ],
+  description: event.description
+});
 
 const SellerInfo = async ({ id }) => {
   const data = await userService.getUserById({ id });
@@ -16,11 +41,12 @@ export default async function Event({
   params,
 }) {
   const slug = (await params).slug;
+  const event = await eventService.getEventById(Number(slug));
   const tickets = await ticketService.getTickets({ id: Number(slug) });
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      event {slug}&nbsp;
+    <div>
+      <FullInfo event={mapMockImages(event)} />
       <div>
         tickets
       </div>
