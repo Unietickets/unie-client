@@ -8,8 +8,7 @@ import { Button } from '@shared/ui';
 export const LogoutButton = () => {
   const handleLogout = async () => {
     await signOut({
-      callbackUrl: '/',
-      redirect: true
+      redirect: false
     });
   };
 
