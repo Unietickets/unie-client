@@ -6,7 +6,8 @@ export function FileUploader({
   isLoading,
   fileInputRef,
   uploadToServer,
-  maxFileSize
+  maxFileSize,
+  onChange
 }) {
   return (
     <S.Form onSubmit={uploadToServer}>
@@ -20,6 +21,7 @@ export function FileUploader({
               multiple
               required
               ref={fileInputRef}
+              onChange={onChange}
             />
             <Button
               variant='primary'

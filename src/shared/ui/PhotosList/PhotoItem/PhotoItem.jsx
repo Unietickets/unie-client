@@ -1,12 +1,12 @@
 import * as S from './styles';
 
 // FIXME нужно поправить расположение фото во враппере
-export function FileItem(props) {
+export function PhotoItem(props) {
   const {
     file,
     fetchFiles,
     setFiles,
-    fileUrl
+    label
   } = props;
   return (
     <S.ListItem>
@@ -17,15 +17,18 @@ export function FileItem(props) {
       )}
 
       <S.ImageWrapper>
-        {file?.fileSize && (
+        {label && (
+          <S.ImageLabel label={label}/>
+        )}
+        {/* {file?.fileSize && (
           <S.SubTitle>
             {file.fileSize}
           </S.SubTitle>
-        )}
+        )} */}
 
-        {fileUrl && (
+        {file && file?.url && (
             <S.Image
-              src={fileUrl}
+              src={file.url}
               alt={file.originalFileName}
             />
           )}

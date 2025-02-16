@@ -3,6 +3,8 @@
 import styled from "styled-components";
 
 import { getTypographyStyles, TYPOGRAPHY } from "@/shared/lib";
+import { Colors } from "@/shared/constants";
+
 import { Button } from "../../Button";
 
 export const ListItem = styled.li`
@@ -39,4 +41,20 @@ export const DeleteButton = styled(Button)`
 export const Image = styled.img`
   width: 100%;
   object-fit: cover;
+`;
+
+export const ImageLabel = styled.div`
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+
+  background-color: ${Colors.UltimateOrange};
+
+  ${({ label }) => label === 'uploaded' && `
+    background-color: ${Colors.PalmTree};
+  `}
 `;
