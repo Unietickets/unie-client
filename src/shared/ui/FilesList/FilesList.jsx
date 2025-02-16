@@ -1,25 +1,17 @@
-import { FileItem } from './FileItem'
+import { FileItem } from "./FileItem";
+import * as S from "./styles";
 
-export function FilesList({
-  files = [],
-  fetchFiles,
-  setFiles,
-  downloadUsingPresignedUrl
-}) {
+export function FilesList({ files = [], fetchFiles, setFiles, downloadUsingPresignedUrl }) {
   if (files.length === 0) {
-    return (
-      <div className='flex h-96 flex-col items-center justify-center '>
-        <p className='text-xl'>No files uploaded yet</p>
-      </div>
-    )
+    return null;
   }
 
   return (
-    <div className='h-96'>
-      <h1 className='text-xl '>
-        Last {files.length} uploaded file{files.length > 1 ? 's' : ''}
-      </h1>
-      <ul className='h-80 overflow-auto'>
+    <>
+      <S.Caption>
+        Uploaded photos:
+      </S.Caption>
+      <S.Wrapper>
         {files.map((file) => (
           <FileItem
             key={file.id}
@@ -30,7 +22,7 @@ export function FilesList({
             fileUrl={file?.url}
           />
         ))}
-      </ul>
-    </div>
-  )
+      </S.Wrapper>
+    </>
+  );
 }

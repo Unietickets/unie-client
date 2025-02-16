@@ -7,3 +7,7 @@ export const Form = styled.form`
   flex-direction: column;
   gap: 16px;
 `;
+
+export const FileInput = styled.input`
+  width: 100%;
+`;

@@ -14,7 +14,7 @@ export function FileUploader({
         <>Loading...</>
       ) : (
           <>
-            <input
+            <S.FileInput
               id='file'
               type='file'
               multiple
