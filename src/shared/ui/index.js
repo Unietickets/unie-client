@@ -7,3 +7,5 @@ export * from './Button';
 export * from './Container';
 export * from './Burger';
 export * from './Portal';
+export * from './FilesList';
+export * from './FileUploader';
