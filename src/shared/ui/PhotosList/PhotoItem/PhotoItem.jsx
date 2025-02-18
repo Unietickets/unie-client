@@ -4,9 +4,8 @@ import * as S from './styles';
 export function PhotoItem(props) {
   const {
     file,
-    fetchFiles,
-    setFiles,
-    label
+    label,
+    onDelete
   } = props;
   return (
     <S.ListItem>
@@ -35,7 +34,7 @@ export function PhotoItem(props) {
 
         <S.DeleteButton
           size='small'
-          // onClick={() => deleteFile(file.id)}
+          onClick={() => onDelete(file)}
           disabled={file?.isDeleting}
           isLoading={file?.isDeleting}
           >

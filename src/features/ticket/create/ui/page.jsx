@@ -1,14 +1,24 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 
 import * as S from './styles';
 
 import { PhotoUploader } from '@/entities/file';
+import { useAuth } from '@/shared/lib';
 
-const page = () => {
+const page = ({ user, availableEvents }) => {
+  console.log(user)
+  console.log(availableEvents)
+  const [previewFiles, setPreviewFiles] = useState([]);
+  const AuthWrapper = useAuth();
+
   return (
-    <S.Wrapper>
-      <PhotoUploader />
-    </S.Wrapper>
+    <AuthWrapper>
+      <S.Wrapper>
+        <PhotoUploader files={previewFiles} setFiles={setPreviewFiles}/>
+      </S.Wrapper>
+    </AuthWrapper>
   );
 };
 

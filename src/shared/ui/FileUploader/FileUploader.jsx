@@ -7,7 +7,7 @@ export function FileUploader({
   fileInputRef,
   uploadToServer,
   maxFileSize,
-  onChange
+  onChange,
 }) {
   return (
     <S.Form onSubmit={uploadToServer}>

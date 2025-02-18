@@ -8,22 +8,33 @@ import * as fileService from '../services'
 
 const MAX_FILE_SIZE_S3_ENDPOINT = 5 * 1024 * 1024;
 
-export function PhotoUploader({ onUploadSuccess }) {
+export function PhotoUploader({ files, setFiles }) {
   const fileInputRef = useRef(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState([])
-  const [files, setFiles] = useState([]);
+  // const [uploadedFiles, setUploadedFiles] = useState([])
+
+  const handleFileDelete = (file) => {
+    setFiles(files.filter((f) => f.name !== file.name));
+  }
 
   // сетим файлы для превью
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
 
-    const filesWithUrls = selectedFiles.map((file) => ({
-      ...file,
-      url: URL.createObjectURL(file),
-    }));
+    const filesWithUrls = selectedFiles.map((file) => {
+
+      return ({
+        lastModified: file.lastModified,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        webkitRelativePath: file.webkitRelativePath,
+        url: URL.createObjectURL(file),
+      })
+    });
+
     setFiles(filesWithUrls);
-  };
+  }
 
   // грузим фото на сервер
   const uploadToServer = async (event) => {
@@ -47,8 +58,8 @@ export function PhotoUploader({ onUploadSuccess }) {
       url: await fileService.getFileLinkById(file.id)
     })))
 
-    setFiles([])
-    setUploadedFiles(filesWithUrls)
+    setFiles(filesWithUrls)
+    // setUploadedFiles(filesWithUrls)
 
     setIsLoading(false)
   }
@@ -62,8 +73,10 @@ export function PhotoUploader({ onUploadSuccess }) {
         onChange={handleFileChange}
         maxFileSize={MAX_FILE_SIZE_S3_ENDPOINT}
       />
-      <PhotosList files={files} label='preview' />
-      <PhotosList files={uploadedFiles} label='uploaded' />
+      <PhotosList files={files} label='preview' onDelete={handleFileDelete}/>
+      {/* TODO удалить */}
+      {/* вряд ли здесь будет отобраться список загруженных на сервер фото */}
+      {/* <PhotosList files={uploadedFiles} label='uploaded' onDelete={handleFileDelete}/> */}
     </>
   )
 }
