@@ -8,6 +8,7 @@ const darkTheme = {
     secondary: Colors.Mako,
   },
   border: Colors.Mako,
+  background: Colors.Carbon,
 };
 
 const lightTheme = {
@@ -18,6 +19,7 @@ const lightTheme = {
     secondary: Colors.Carbon,
   },
   border: Colors.Doctor,
+  background: Colors.TitaniumWhite,
 };
 
 export const theme = {

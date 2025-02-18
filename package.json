@@ -15,6 +15,8 @@
     "bcryptjs": "2.4.3",
     "eslint-import-resolver-alias": "1.1.2",
     "jsonwebtoken": "9.0.2",
+    "minio": "8.0.4",
+    "nanoid": "5.1.0",
     "next": "15.1.6",
     "next-auth": "4.24.11",
     "pg": "8.13.1",

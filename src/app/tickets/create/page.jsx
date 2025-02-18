@@ -1,9 +1,12 @@
 import React from 'react';
 
-export default async function CreateTicketPage() {
+import { CreateTicketPage} from '@features/ticket/create';
+
+export default async function page() {
   return (
-    <div>
+    <>
       Create Ticket
-    </div>
+      <CreateTicketPage />
+    </>
   );
 };
