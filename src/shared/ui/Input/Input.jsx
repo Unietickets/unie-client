@@ -1,12 +1,9 @@
-import { forwardRef } from 'react';
-
 import * as S from './Input.styles';
 
-export const Input = forwardRef((props, ref) => (
+export const Input = (props) => (
   <S.Input
     {...props}
-    ref={ref}
   />
-));
+);
 
 Input.displayName = 'Input';

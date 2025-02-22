@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate": "npx prisma migrate dev",
+    "generate:client": "npx prisma generate",
+    "studio": "npx prisma studio"
   },
   "dependencies": {
     "@adobe/react-spectrum": "3.39.0",
@@ -23,6 +26,7 @@
     "prisma": "6.1.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-select": "5.10.0",
     "styled-components": "6.1.14"
   },
   "devDependencies": {

@@ -20,6 +20,10 @@ class EventService {
     return eventRepository.getAllEvents();
   }
 
+  async getAvailableEvents() {
+    return eventRepository.getAvailableEvents();
+  }
+
   async getEventsByGenre(genre = null, limit = 10) {
     return eventRepository.getEventsByGenre(genre, limit);
   }

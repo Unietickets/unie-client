@@ -13,6 +13,14 @@ export class EventRepository {
     return await prisma.event.findMany();
   }
 
+  async getAvailableEvents() {
+    return await prisma.event.findMany({
+      where: {
+        status: 'coming'
+      }
+    });
+  }
+
   async getRecommendedEvents(userId = null) {
     return await prisma.event.findMany({
       where: {

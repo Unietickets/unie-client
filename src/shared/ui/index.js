@@ -9,3 +9,4 @@ export * from './Burger';
 export * from './Portal';
 export * from './PhotosList';
 export * from './FileUploader';
+export * from './Select';
