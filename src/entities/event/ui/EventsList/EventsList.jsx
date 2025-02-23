@@ -3,7 +3,7 @@ import React from "react";
 
 import { ROUTES } from "@/core/routes";
 
-import { eventService } from "../../services";
+import * as eventService from "../../services";
 
 export const EventsList = async () => {
   const events = await eventService.getAllEvents();

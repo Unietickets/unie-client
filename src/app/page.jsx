@@ -1,4 +1,5 @@
-import { eventService, CardsList } from "@entities/event";
+import { CardsList } from "@entities/event";
+import * as eventService from "@entities/event/services";
 
 import * as Styles from "./styles";
 

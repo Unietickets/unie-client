@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { ROUTES } from "@/core/routes";
-import { userService, UserInfo } from "@/entities/user";
+import { UserInfo } from "@/entities/user";
+import * as userService from "@/entities/user/services";
 import { LogoutButton } from "@features/auth";
 
 import * as S from './styles';
