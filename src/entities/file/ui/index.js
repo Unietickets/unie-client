@@ -1,1 +1,1 @@
-export { PhotoUploader } from './PhotoUploader';
+export { PhotoUploader, uploadToServer } from './PhotoUploader';

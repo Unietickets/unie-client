@@ -21,6 +21,10 @@ export async function getAllEvents() {
   return eventRepository.getAllEvents();
 }
 
+export async function getAvailableEvents() {
+  return eventRepository.getAvailableEvents();
+}
+
 export async function getEventsByGenre(genre = null, limit = 10) {
   return eventRepository.getEventsByGenre(genre, limit);
 }

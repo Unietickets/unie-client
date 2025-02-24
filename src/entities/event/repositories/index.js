@@ -14,6 +14,14 @@ export async function getAllEvents() {
     return await prisma.event.findMany();
   }
 
+export async function getAvailableEvents() {
+  return await prisma.event.findMany({
+    where: {
+      status: 'coming'
+    }
+  });
+}
+
 export async function getRecommendedEvents(userId = null) {
   return await prisma.event.findMany({
     where: {

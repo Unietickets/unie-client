@@ -109,7 +109,7 @@ const saveFilesToS3AndDB = async (files, presignedUrls, onUploadSuccess = defaul
     presignedUrls.map(async (presignedUrl) => {
       // Находим нужный файл по имени и размеру
       const file = files.find(
-        (file) => file.name === presignedUrl.originalFileName && file.size === presignedUrl.fileSize
+        (file) => file.fileName === presignedUrl.originalFileName && file.size === presignedUrl.fileSize
       );
       if (!file) {
         throw new Error('File not found');
