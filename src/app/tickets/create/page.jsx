@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { userService } from '@/entities/user';
-import { CreateTicketPage} from '@features/ticket/create';
-import { eventService } from '@/entities/event';
+import * as userService from '@/entities/user/services';
+import * as eventService from '@/entities/event/services';
+import { CreateTicketPage } from '@features/ticket/create';
 
 // Отключаем статическую генерацию для этой страницы
 export const dynamic = 'force-dynamic';

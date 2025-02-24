@@ -1,13 +1,18 @@
-Команды для prisma:
+# Установка и запуск
 
-# Создание миграции
-npx prisma migrate dev --name имя_миграции
+# Дев
+- cp .env.development.example .env.development и установка корректных значений переменных
 
-# Применение миграции
-npx prisma migrate dev
+- для старта дев версии приложения (дев сервер webpack)
+npm run docker:dev:build
 
-# Обновление клиента
-npx prisma generate
+# Прод
 
-# Открытие дашборда
-npx prisma studio
+- cp .env.production.example .env.production и установка корректных значений переменных
+
+- для старта прод версии приложения (оптимизированный билд и сервер)
+npm run docker:prod:build
+
+# PS
+dotenv -e .env.development --
+приписка нужна для указания пути до енв при локальных действиях с призмой

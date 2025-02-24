@@ -6,8 +6,6 @@ import * as userService from "@/entities/user/services";
 import { LogoutButton } from "@features/auth";
 
 import * as S from './styles';
-import { redirect } from "next/navigation";
-import { ROUTES } from "@/core/routes";
 
 // Отключаем статическую генерацию для этой страницы
 export const dynamic = 'force-dynamic';
