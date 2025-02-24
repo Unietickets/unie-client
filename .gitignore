@@ -42,4 +42,5 @@ yarn-error.log*
 next-env.d.ts
 
 # docker
-/docker-data
+/docker-data/postgres
+/docker-data/minio

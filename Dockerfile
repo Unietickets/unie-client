@@ -18,14 +18,6 @@ RUN npm ci
 FROM base AS builder
 WORKDIR /app
 
-# Добавляем аргументы для сборки
-ARG DATABASE_URL
-ARG DATABASE_HOST
-ARG DATABASE_PORT
-ARG DATABASE_USER
-ARG DATABASE_PASSWORD
-ARG DATABASE_NAME
-
 # Устанавливаем переменные окружения
 ENV DATABASE_URL=${DATABASE_URL}
 ENV DATABASE_HOST=${DATABASE_HOST}
@@ -50,27 +42,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--experimental-json-modules"
-
-# Добавляем аргументы для production
-ARG DATABASE_URL
-ARG DATABASE_HOST
-ARG DATABASE_PORT
-ARG DATABASE_USER
-ARG DATABASE_PASSWORD
-ARG DATABASE_NAME
-
-# Устанавливаем переменные окружения
-ENV DATABASE_URL=${DATABASE_URL}
-ENV DATABASE_HOST=${DATABASE_HOST}
-ENV DATABASE_PORT=${DATABASE_PORT}
-ENV DATABASE_USER=${DATABASE_USER}
-ENV DATABASE_PASSWORD=${DATABASE_PASSWORD}
-ENV DATABASE_NAME=${DATABASE_NAME}
-
-RUN apt-get update && apt-get install -y \
-    postgresql-client \
-    netcat-traditional \
-    && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
