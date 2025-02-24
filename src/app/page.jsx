@@ -1,6 +1,11 @@
-import { eventService, CardsList } from "@entities/event";
+import { CardsList } from "@entities/event";
+import * as eventService from "@entities/event/services";
 
 import * as Styles from "./styles";
+
+// Отключаем статическую генерацию для этой страницы
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 const mapMockImages = (event) => ({
   id: event.id,

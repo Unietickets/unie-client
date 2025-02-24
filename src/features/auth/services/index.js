@@ -1,9 +1,7 @@
-import { userService } from "@entities/user";
+'use server';
 
-class AuthService {
-  register = async ({ email, password, name }) => {
-    return await userService.createUser({ email, password, name });
-  };
+import * as userService from "@entities/user/services";
+
+export const register = async ({ email, password, name }) => {
+  return await userService.createUser({ email, password, name });
 };
-
-export const authService = new AuthService();

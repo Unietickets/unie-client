@@ -1,9 +1,8 @@
-import { ticketRepository } from "../repositories"
+'use server';
 
-class TicketService {
-  async getEventTickets({ eventId }) {
-    return ticketRepository.getTicketsByEventId(eventId);
-  }
-};
+import * as ticketRepository from "../repositories";
 
-export const ticketService = new TicketService();
+export async function getEventTickets({ eventId }) {
+  return ticketRepository.getTicketsByEventId(eventId);
+}
+
