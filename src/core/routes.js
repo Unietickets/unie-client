@@ -77,8 +77,8 @@ export const PROTECTED_ROUTES = [
 
 export const PUBLIC_ROUTES = [
   ROUTES.home,
-  ROUTES.auth.signIn,
-  ROUTES.auth.signUp,
+  ROUTES.signIn,
+  ROUTES.signUp,
   ROUTES.events,
   ROUTES.tickets.create,
   ROUTES.support,

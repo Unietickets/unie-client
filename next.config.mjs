@@ -5,7 +5,6 @@ const nextConfig = {
   },
   output: 'standalone',
   experimental: {
-    outputFileTracingRoot: undefined,
     esmExternals: true
   },
   webpack: (config, { isServer }) => {
