@@ -1,44 +1,42 @@
-import { eventRepository } from "../repositories";
+'use server'
 
-class EventService {
-  async getEventById(id) {
-    return eventRepository.getEventById(id);
-  }
+import * as eventRepository from "../repositories";
 
-  async getRecommendedEvents(userId = null) {
-    const generalRecommendedEvents = await eventRepository.getRecommendedEvents();
-    let usersRecommendedEvents = [];
-
-    if (userId) {
-      usersRecommendedEvents = await eventRepository.getRecommendedEvents(userId);
-    }
-
-    return [...generalRecommendedEvents, ...usersRecommendedEvents];
-  }
-
-  async getAllEvents() {
-    return eventRepository.getAllEvents();
-  }
-
-  async getAvailableEvents() {
-    return eventRepository.getAvailableEvents();
-  }
-
-  async getEventsByGenre(genre = null, limit = 10) {
-    return eventRepository.getEventsByGenre(genre, limit);
-  }
-
-  async getArtEvents(limit) {
-    return this.getEventsByGenre('Art', limit);
-  }
-
-  async getMusicEvents(limit) {
-    return this.getEventsByGenre('Music', limit);
-  }
-
-  async getSportEvents(limit) {
-    return this.getEventsByGenre('Sports', limit);
-  }
+export async function getEventById(id) {
+  return eventRepository.getEventById(id);
 }
 
-export const eventService = new EventService();
+export async function getRecommendedEvents(userId = null) {
+  const generalRecommendedEvents = await eventRepository.getRecommendedEvents();
+  let usersRecommendedEvents = [];
+
+  if (userId) {
+    usersRecommendedEvents = await eventRepository.getRecommendedEvents(userId);
+  }
+
+  return [...generalRecommendedEvents, ...usersRecommendedEvents];
+}
+
+export async function getAllEvents() {
+  return eventRepository.getAllEvents();
+}
+
+export async function getAvailableEvents() {
+  return eventRepository.getAvailableEvents();
+}
+
+export async function getEventsByGenre(genre = null, limit = 10) {
+  return eventRepository.getEventsByGenre(genre, limit);
+}
+
+export async function getArtEvents(limit) {
+  return getEventsByGenre('Art', limit);
+}
+
+export async function getMusicEvents(limit) {
+  return getEventsByGenre('Music', limit);
+}
+
+export async function getSportEvents(limit) {
+  return getEventsByGenre('Sports', limit);
+}

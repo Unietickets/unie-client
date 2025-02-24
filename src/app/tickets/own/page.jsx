@@ -4,7 +4,11 @@ import React from 'react';
 import { ROUTES } from '@/core/routes';
 import { Button } from '@/shared/ui';
 
-export default async function OwnTicketsPage() {
+// Отключаем статическую генерацию для этой страницы
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
+
+export default function OwnTicketsPage() {
   return (
     <div>
       Own Tickets

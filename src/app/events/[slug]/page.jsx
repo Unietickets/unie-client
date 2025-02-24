@@ -1,6 +1,11 @@
-import { eventService, FullInfo } from "@entities/event";
-import { userService } from "@entities/user";
-import { ticketService } from "@entities/ticket";
+import { FullInfo } from "@entities/event";
+import * as eventService from "@entities/event/services";
+import * as userService from "@entities/user/services";
+import * as ticketService from "@entities/ticket/services";
+
+// Отключаем статическую генерацию для этой страницы
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 const mapMockImages = (event) => ({
   id: event.id,

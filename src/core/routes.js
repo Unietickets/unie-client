@@ -12,6 +12,10 @@ export const ROUTES = {
     href: '/',
     label: 'Home'
   },
+  auth: {
+    signIn: '/auth/sign-in',
+    signUp: '/auth/sign-up',
+  },
   profile: {
     Icon: UserIcon,
     href: '/profile',
@@ -22,10 +26,6 @@ export const ROUTES = {
     href: '/events',
     label: 'Events'
   },
-//   event: {
-//     href: '/events/[id]',
-//     label: 'Events'
-// },
   withdraw: {
       href: '/balance/withdraw',
       label: 'Withdraw'
@@ -83,7 +83,6 @@ export const PUBLIC_ROUTES = [
   ROUTES.tickets.create,
   ROUTES.support,
   ROUTES.FAQ,
-  // ROUTES.event,
 ];
 
 export const AUTHORIZED_ROUTES = [
