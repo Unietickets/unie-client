@@ -3,7 +3,6 @@
 import {
   S3_ENDPOINT,
   S3_PORT,
-  S3_USE_SSL,
   S3_ROOT_USER,
   S3_ROOT_PASSWORD
 } from '@/core/constants';
@@ -19,7 +18,7 @@ export async function initializeS3Client() {
       port: S3_PORT,
       accessKey: S3_ROOT_USER,
       secretKey: S3_ROOT_PASSWORD,
-      useSSL: S3_USE_SSL,
+      useSSL: false,
     });
   }
   return s3Client;

@@ -5,4 +5,3 @@ export const S3_ENDPOINT = process.env.S3_ENDPOINT ?? "kubernetes.docker.interna
 export const S3_PORT = process.env.S3_PORT ? Number(process.env.S3_PORT) : 9000
 export const S3_ROOT_USER = process.env.S3_ROOT_USER ?? ""
 export const S3_ROOT_PASSWORD = process.env.S3_ROOT_PASSWORD ?? ""
-export const S3_USE_SSL = Boolean(process.env?.S3_USE_SSL)
