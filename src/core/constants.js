@@ -7,4 +7,4 @@ export const S3_ACCESS_KEY = process.env.S3_ACCESS_KEY ?? ""
 export const S3_SECRET_KEY = process.env.S3_SECRET_KEY ?? ""
 export const S3_ROOT_USER = process.env.S3_ROOT_USER ?? ""
 export const S3_ROOT_PASSWORD = process.env.S3_ROOT_PASSWORD ?? ""
-export const S3_USE_SSL = process.env.S3_USE_SSL ?? false
+export const S3_USE_SSL = Boolean(process.env?.S3_USE_SSL)
