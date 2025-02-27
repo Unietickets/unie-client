@@ -68,7 +68,8 @@ model Ticket {
   event_id    Int
   upload_date DateTime     @default(now())
   image       String?      @db.VarChar(255)
-  status      TicketStatus @default(unverified)
+  status      TicketStatus @default(available)
+  is_verified Boolean      @default(false)
   price       Decimal?     @db.Decimal(10, 2)
   description String?
 
@@ -135,8 +136,9 @@ enum TransactionStatus {
 }
 
 enum TicketStatus {
-  unverified
-  verified
+  available
+  sold
+  reserved
 }
 
 enum DealStatus {
