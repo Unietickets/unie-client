@@ -3,9 +3,9 @@
 import {
   S3_ENDPOINT,
   S3_PORT,
-  S3_ACCESS_KEY,
-  S3_SECRET_KEY,
-  S3_USE_SSL
+  S3_USE_SSL,
+  S3_ROOT_USER,
+  S3_ROOT_PASSWORD
 } from '@/core/constants';
 import * as Minio from 'minio'
 
@@ -17,8 +17,8 @@ export async function initializeS3Client() {
     s3Client = new Minio.Client({
       endPoint: S3_ENDPOINT,
       port: S3_PORT,
-      accessKey: S3_ACCESS_KEY,
-      secretKey: S3_SECRET_KEY,
+      accessKey: S3_ROOT_USER,
+      secretKey: S3_ROOT_PASSWORD,
       useSSL: S3_USE_SSL,
     });
   }
