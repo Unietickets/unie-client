@@ -141,6 +141,10 @@ const saveFilesToS3AndDB = async (files, presignedUrls, onUploadSuccess = defaul
 const getFileLinkById = async (id) => {
   const file = await fileRepository.getFileNameById(id);
 
+  if (file == null) {
+    throw new Error('File not found');
+  }
+
   const presignedUrl = await createPresignedUrlToDownload({
     bucketName: S3_BUCKET_NAME,
     fileName: file.fileName

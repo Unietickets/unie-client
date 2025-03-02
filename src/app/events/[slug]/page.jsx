@@ -56,7 +56,7 @@ export default async function Event({
   const ticketsWithPhotos = await Promise.all(
     tickets?.map(async (t) => ({
       ...t,
-      photoUrl: await fileService.getFileLinkById(t?.image)
+      ...(t?.image && { photoUrl: await fileService.getFileLinkById(t.image) })
     }))
   );
 
