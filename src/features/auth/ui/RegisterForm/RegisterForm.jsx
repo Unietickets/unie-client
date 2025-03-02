@@ -1,10 +1,10 @@
 'use client';
 
-import { Input } from '@/shared/ui';
+import { Input, Switch } from '@/shared/ui';
 import { ROUTES } from '@core/routes';
 
 import * as S from './RegisterForm.styles';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 
 import { createUserAction } from './action';
 
@@ -16,6 +16,7 @@ const initialState = {
 
 export function RegisterForm() {
   const [state, formAction, pending] = useActionState(createUserAction, initialState);
+  const [acceptTermsAndConditions, setAcceptTermsAndConditions] = useState(true);
 
   return (
     <S.Form
@@ -46,6 +47,22 @@ export function RegisterForm() {
         name="password"
         required
       />
+
+      <S.SwitchItem>
+        <Switch
+          id="accept-terms-and-conditions"
+          name="accept-terms-and-conditions"
+          checked={acceptTermsAndConditions}
+          onChange={(checked) => setAcceptTermsAndConditions(checked)}
+        />
+        <label htmlFor="accept-terms-and-conditions">
+          Accept
+          {' '}
+          <S.MyLink href={ROUTES.termsAndConditions.href}>
+            {ROUTES.termsAndConditions.label}
+          </S.MyLink>
+        </label>
+      </S.SwitchItem>
 
       <S.Button
         variant='primary'

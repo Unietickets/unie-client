@@ -65,6 +65,10 @@ export const ROUTES = {
     Icon: QuestionIcon,
     href: '/FAQ',
     label: 'FAQ'
+  },
+  termsAndConditions: {
+    href: '/terms-and-conditions',
+    label: 'Terms and Conditions'
   }
 }
 
