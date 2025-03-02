@@ -28,3 +28,22 @@ export const createTicket = async ({
     price: numberPrice
   });
 }
+
+export const getOwnTickets = async (userId) => {
+  if (userId == null) {
+    return {
+      selling: [],
+      buying: [],
+    };
+  }
+  
+  const userTickets = await ticketRepository.getUserTicketsById(userId);
+
+  const userSellingTickets = userTickets.filter(t => t.user_id === userId);
+  const userBuyingTickets = userTickets.filter(t => t.user_id !== userId);
+
+  return {
+    selling: userSellingTickets,
+    buying: userBuyingTickets
+  }
+}
