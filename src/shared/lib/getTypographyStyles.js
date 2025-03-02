@@ -23,7 +23,6 @@ export const getTypographyStyles = (variant) => {
         line-height: 32px;
       `;
 
-
     case 'body':
       return `
         font-style: normal;

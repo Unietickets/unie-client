@@ -10,3 +10,6 @@ export * from './Portal';
 export * from './PhotosList';
 export * from './FileUploader';
 export * from './Select';
+export * from './Switch';
+export * from './TagGroup';
+export * from './Accordion';
