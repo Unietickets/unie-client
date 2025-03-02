@@ -69,6 +69,10 @@ export const ROUTES = {
   termsAndConditions: {
     href: '/terms-and-conditions',
     label: 'Terms and Conditions'
+  },
+  payment: {
+    href: '/payment',
+    label: 'Payment'
   }
 }
 
