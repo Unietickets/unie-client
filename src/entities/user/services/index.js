@@ -30,6 +30,10 @@ export const getUserById = async (id) => {
 
 export const getUserInfoBySession = async () => {
   const session = await getServerSession(authOptions);
+
+  if (session == null) {
+    return null;
+  }
   const { user } = session;
 
   return await getUserByEmail(user.email);

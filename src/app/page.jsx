@@ -1,5 +1,6 @@
 import { CardsList } from "@entities/event";
 import * as eventService from "@entities/event/services";
+import * as userService from "@entities/user/services";
 
 import * as Styles from "./styles";
 
@@ -31,7 +32,9 @@ const mapMockImages = (event) => ({
 });
 
 export default async function Home() {
-  const recommendedEvents = await eventService.getRecommendedEvents();
+  const user = await userService.getUserInfoBySession();
+
+  const recommendedEvents = await eventService.getRecommendedEvents(user?.id);
   const artEvents = await eventService.getArtEvents();
   const musicEvents = await eventService.getMusicEvents();
   const sportEvents = await eventService.getSportEvents();
