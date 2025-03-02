@@ -45,10 +45,3 @@ export const Caption = styled.span`
 export const MyLink = styled(Link)`
     color: ${({ theme }) => theme.primary};
 `;
-
-export const SwitchItem = styled.div`
-  display: flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: 8px;
-`;
