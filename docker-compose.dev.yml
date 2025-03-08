@@ -59,3 +59,20 @@ services:
       - postgres
     networks:
       - app_network
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      nextjs:
+        condition: service_healthy
+    restart: always
+    networks:
+      - app_network
