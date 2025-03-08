@@ -55,6 +55,11 @@ services:
     ports:
       - "3000:3000"
       - "5555:5555"
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
       - postgres
     networks:
