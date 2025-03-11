@@ -1,5 +1,9 @@
 version: '3.8'
 
+x-init-dirs: &init-dirs
+  condition: service_healthy
+  command: ./init-docker-dirs.sh
+  
 services:
   postgres:
     image: postgres:13.3
