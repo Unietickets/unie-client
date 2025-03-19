@@ -16,9 +16,9 @@ export function PhotosList({
         {label === 'uploaded' ? 'Uploaded photos:' : 'Photos preview:'}
       </S.Caption>
       <S.Wrapper>
-        {files.map((file, index) => (
+        {files.map((file) => (
           <PhotoItem
-            key={file?.id ?? index}
+            key={file.fileName}
             file={file}
             label={label}
             onDelete={onDelete}

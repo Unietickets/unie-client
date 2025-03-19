@@ -19,7 +19,8 @@ const page = ({ user, availableEvents }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const photosResult = await uploadToServer(previewFiles)
+    const filesObjectToUpload = Object.values(fileInputRef.current.files);
+    const photosResult = await uploadToServer(filesObjectToUpload);
 
     const data = {
       event: selectedEvent,
@@ -30,7 +31,9 @@ const page = ({ user, availableEvents }) => {
     };
 
     if (photosResult !== null) {
-      createTicket(data);
+      await createTicket(data);
+      alert('Ticket created!');
+      redirect(ROUTES.tickets.ownList.href);
     }
   }
 

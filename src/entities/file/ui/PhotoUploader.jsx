@@ -13,7 +13,7 @@ export const uploadToServer = async (files) => {
   try {
     // validate files
     const filesInfo = files.map((file) => ({
-      originalFileName: file.fileName,
+      originalFileName: file.name,
       fileSize: file.size,
     }))
 
@@ -68,7 +68,6 @@ export function PhotoUploader({ files, setFiles, name, fileInputRef }) {
         fileInputRef={fileInputRef}
         onChange={handleFileChange}
         maxFileSize={MAX_FILE_SIZE_S3_ENDPOINT}
-        files={files}
         name={name}
       />
       <PhotosList files={files} label='preview' onDelete={handleFileDelete}/>
