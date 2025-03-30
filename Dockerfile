@@ -1,4 +1,4 @@
-FROM node:18 AS base
+FROM node:18-slim AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -34,6 +34,21 @@ COPY . .
 RUN npx prisma generate
 # TODO удалить флаг
 RUN npm run build --debug
+# Проверяем содержимое директории .next
+RUN ls -la /app/.next || echo "Директория .next не существует"
+# Проверяем наличие директории standalone и создаем ее, если она не существует
+RUN if [ ! -d "/app/.next/standalone" ]; then \
+    echo "Директория standalone не существует, создаем ее вручную"; \
+    mkdir -p /app/.next/standalone; \
+    cp /app/next.config.mjs /app/.next/standalone/; \
+    cp -r /app/.next/server /app/.next/standalone/; \
+    cp -r /app/.next/static /app/.next/standalone/; \
+    cp /app/package.json /app/.next/standalone/; \
+    cp -r /app/public /app/.next/standalone/; \
+    cp /app/.next/required-server-files.json /app/.next/standalone/; \
+    echo "Директория standalone создана вручную"; \
+    ls -la /app/.next/standalone; \
+fi
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -43,6 +58,12 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--experimental-json-modules"
 
+# Установка необходимых пакетов
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    netcat-traditional \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -50,9 +71,11 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.mjs ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Копируем всю директорию .next для корректной работы next start
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/prisma ./prisma
 
 # Создаем скрипт для проверки доступности базы данных
@@ -69,7 +92,12 @@ echo "Running database migrations..."\n\
 npx prisma migrate deploy\n\
 \n\
 echo "Starting application..."\n\
-NODE_OPTIONS="--experimental-json-modules" exec node server.js\n\
+if [ -f "/app/server.js" ]; then\n\
+  NODE_OPTIONS="--experimental-json-modules" exec node server.js\n\
+else\n\
+  echo "server.js not found, trying to start with next start"\n\
+  NODE_OPTIONS="--experimental-json-modules" exec npx next start\n\
+fi\n\
 ' > /app/wait-for-db.sh
 
 RUN chmod +x /app/wait-for-db.sh
