@@ -4,18 +4,25 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { Input, Switch } from "@shared/ui";
+import { Input, ErrorCaption } from "@shared/ui";
+import { useValidation } from "@/shared/lib";
 import { ROUTES } from "@core/routes";
 
+import { loginSchema } from "./LoginForm.validation";
 import * as S from "./LoginForm.styles";
 
 export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { errors, validate } = useValidation(loginSchema);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validate({ email, password })) {
+      return;
+    }
 
     const signInResponse = await signIn("credentials", {
       email,
@@ -39,9 +46,31 @@ export function LoginForm() {
         <S.SubTitle>Fill out all the fields and join our community</S.SubTitle>
       </S.Info>
 
-      <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
+      {(errors.email || errors.password) && (
+        <S.ErrorBlock>
+          <ErrorCaption>
+            Incorrect email or password
+          </ErrorCaption>
+        </S.ErrorBlock>
+      )}
 
-      <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+      <Input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"
+        required
+        hasError={Boolean(errors?.email)}
+      />
+
+      <Input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
+        required
+        hasError={Boolean(errors?.password)}
+      />
 
       <S.Button variant="primary" size="medium" isRounded type="submit" fullWidth={false}>
         Login

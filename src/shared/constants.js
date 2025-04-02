@@ -26,6 +26,7 @@ export const Colors = {
     DeeplyEmbarrassed: '#EFB2B3',
     YoungCrab: '#FB9D9D',
     StrawberryField: '#FA8485',
+    SmokedSalmon: '#fb8373',
     FlirtySalmon: '#F96C6C',
     Flamboyant: '#F73B3B',
     UltimateOrange: '#FF4000',

@@ -21,14 +21,14 @@ export const Input = styled.input`
   ${({ withoutBorder }) =>
     withoutBorder &&
     `
-      --input-border-color: ${Colors.Transparent};
+      border-color: ${Colors.Transparent};
     `};
 
   ${({ hasError }) =>
     hasError &&
     `
-      &&& {
-        --input-border-color: ${Colors.VividOrange};
+      & {
+        border-color: ${Colors.SmokedSalmon};
       }
     `};
 

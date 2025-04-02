@@ -45,3 +45,7 @@ export const Caption = styled.span`
 export const MyLink = styled(Link)`
     color: ${({ theme }) => theme.primary};
 `;
+
+export const ErrorBlock = styled.div`
+  width: 100%;
+`;

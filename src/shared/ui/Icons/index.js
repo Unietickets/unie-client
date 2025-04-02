@@ -9,3 +9,4 @@ export { UserHeadset as UserHeadsetIcon } from './UserHeadset';
 export { Arrow as ArrowIcon } from './Arrow';
 export { Ticket as TicketIcon } from './Ticket';
 export { Withdraw as WithdrawIcon } from './Withdraw';
+export { Cross as CrossIcon } from './Cross';

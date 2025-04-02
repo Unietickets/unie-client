@@ -13,3 +13,4 @@ export * from './Select';
 export * from './Switch';
 export * from './TagGroup';
 export * from './Accordion';
+export * from './ErrorCaption';
