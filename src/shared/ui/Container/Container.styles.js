@@ -13,7 +13,8 @@ export const Container = styled.div`
     max-width: 573px;
   }
 
-  ${mediaQueries.gt.Desktop} {
+  // TODO вернуть, когда будет десктоп
+  /* ${mediaQueries.gt.Desktop} {
     max-width: 1440px;
-  }
+  } */
 `;

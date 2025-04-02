@@ -15,6 +15,7 @@ export const Wrapper = styled.nav`
 
   width: 70%;
   min-width: 270px;
+  max-width: 500px;
   height: 100%;
   padding-top: 32px;
   padding-left: 28px;

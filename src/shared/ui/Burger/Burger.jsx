@@ -25,11 +25,11 @@ export const Burger = () => {
     return cutHelpPages(PUBLIC_ROUTES);
   }, [status]);
 
-  const handleClickOutside = () => {
+  const handleClose = () => {
     setIsOpen(false);
   }
 
-  const ref = useOutsideClick(handleClickOutside);
+  const ref = useOutsideClick(handleClose);
 
   return (
     <>
@@ -45,7 +45,12 @@ export const Burger = () => {
                 {routes.map((route) => (
                   <S.MenuItem key={route.href}>
                     {route.Icon && <route.Icon />}
-                    <Link href={route.href}>{route.label}</Link>
+                    <Link
+                      href={route.href}
+                      onClick={handleClose}
+                    >
+                      {route.label}
+                    </Link>
                   </S.MenuItem>
                 ))}
               </S.Menu>
@@ -56,7 +61,12 @@ export const Burger = () => {
                 {[ROUTES.FAQ, ROUTES.support].map((page) => (
                   <S.MenuItem key={page.href}>
                     {page.Icon && <page.Icon />}
-                    <Link href={page.href}>{page.label}</Link>
+                    <Link
+                      href={page.href}
+                      onClick={handleClose}
+                    >
+                      {page.label}
+                    </Link>
                   </S.MenuItem>
                 ))}
               </S.Menu>
