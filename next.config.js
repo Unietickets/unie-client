@@ -3,10 +3,10 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
+  output: 'standalone',
   reactStrictMode: true,
   experimental: {
     disableOptimizedLoading: true,
-    disableStaticImages: true,
   },
 };
 

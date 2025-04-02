@@ -40,7 +40,6 @@ RUN ls -la /app/.next || echo "Директория .next не существу�
 RUN if [ ! -d "/app/.next/standalone" ]; then \
     echo "Директория standalone не существует, создаем ее вручную"; \
     mkdir -p /app/.next/standalone; \
-    cp /app/next.config.mjs /app/.next/standalone/; \
     cp -r /app/.next/server /app/.next/standalone/; \
     cp -r /app/.next/static /app/.next/standalone/; \
     cp /app/package.json /app/.next/standalone/; \
@@ -68,7 +67,6 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Копируем необходимые файлы
-COPY --from=builder --chown=nextjs:nodejs /app/next.config.mjs ./
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=deps /app/node_modules ./node_modules
@@ -93,7 +91,7 @@ npx prisma migrate deploy\n\
 \n\
 echo "Starting application..."\n\
 if [ -f "/app/server.js" ]; then\n\
-  NODE_OPTIONS="--experimental-json-modules" exec node server.js\n\
+  NODE_OPTIONS="--experimental-json-modules" exec node .next/standalone/server.js\n\
 else\n\
   echo "server.js not found, trying to start with next start"\n\
   NODE_OPTIONS="--experimental-json-modules" exec npx next start\n\

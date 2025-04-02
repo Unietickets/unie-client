@@ -6,7 +6,7 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["clientExtensions"]
-    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "rhel-openssl-1.0.x"]
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "rhel-openssl-1.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
 model User {
