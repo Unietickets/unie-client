@@ -1,4 +1,4 @@
-FROM node:18-slim AS base
+FROM node:18 AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -8,7 +8,6 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     postgresql-client \
     netcat-traditional \
-    openssl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
