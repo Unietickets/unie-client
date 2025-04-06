@@ -79,7 +79,7 @@ export function RegisterForm() {
 
       <Input
         type="password"
-        placeholder="Repeat password"
+        placeholder="Confirm password"
         name="password-repeat"
         required
         hasError={Boolean(errors?.passwordRepeat)}

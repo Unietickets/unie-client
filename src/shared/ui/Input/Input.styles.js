@@ -14,7 +14,7 @@ export const Input = styled.input`
 
   outline: var(--input-outline, none);
   box-shadow: var(--input-box-shadow, none);
-  border-radius: 40px;
+  border-radius: 15px;
   border: 1px solid ${Colors.TitaniumWhite};
   background-color: ${Colors.Transparent};
 

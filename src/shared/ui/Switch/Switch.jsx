@@ -15,8 +15,8 @@ export const Switch = ({ hasError = false, onChange, ref, ...restProps }) => {
     <ReactSwitch
       onChange={handleChange}
       ref={ref}
-      width={29}
-      height={16}
+      width={44}
+      height={24}
       onColor={Colors.FluorescentOrange}
       offColor={Colors.Mako}
       checkedIcon={false}
