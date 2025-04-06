@@ -11,6 +11,15 @@ export const getTicketsByEventId = async (eventId) => {
   });
 };
 
+export const getTicketByUserIdAndStatus = async ({ userId, status = 'available' }) => {
+  return await prisma.ticket.findMany({
+    where: {
+      user_id: userId,
+      status,
+    },
+  });
+}
+
 export const createTicket = async ({
   userId,
   eventId,
