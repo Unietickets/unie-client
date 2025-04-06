@@ -8,6 +8,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     postgresql-client \
     netcat-traditional \
+    openssl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
