@@ -52,3 +52,7 @@ export const SwitchItem = styled.div`
   align-self: flex-start;
   gap: 8px;
 `;
+
+export const ErrorBlock = styled.div`
+  width: 100%;
+`;
