@@ -2,9 +2,27 @@
 
 import { serializeTickets } from "../helpers";
 import * as ticketRepository from "../repositories"
+import * as userService from "@/entities/user/services";
 
 export const getEventTickets = async ({ eventId }) => {
-  return ticketRepository.getTicketsByEventId(eventId);
+  const tickets = await ticketRepository.getTicketsByEventId(eventId) ?? [];
+
+  const userIds = [...new Set(tickets.map(ticket => ticket.user_id))];
+
+  const sellerPromises = userIds.map(userId => userService.getUserById(userId));
+  const sellers = await Promise.all(sellerPromises);
+
+  const sellerMap = {};
+  userIds.forEach((userId, index) => {
+    sellerMap[userId] = sellers[index];
+  });
+
+  const ticketsWithSellers = tickets.map(ticket => ({
+    ...ticket,
+    seller: sellerMap[ticket.user_id]
+  }));
+
+  return serializeTickets(ticketsWithSellers);
 }
 
 export const getUserTickets = async ({ userId }) => {

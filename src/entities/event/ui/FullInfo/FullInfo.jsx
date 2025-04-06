@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { TagGroup, TAG_VARIANTS } from '@/shared/ui';
+
 import * as S from './styles';
 
 export const FullInfo = ({ event }) => {
@@ -12,6 +14,17 @@ export const FullInfo = ({ event }) => {
       </S.StyledEventCard>
       <S.TextWrapper>
         <S.Title>{event.title}</S.Title>
+        <TagGroup>
+          {event.metadata?.map((item) => (
+            <TagGroup.Tag
+              key={item.name}
+              variant={TAG_VARIANTS.NOTE}
+              isAccent={item?.accent}
+            >
+              {item.value}
+            </TagGroup.Tag>
+          ))}
+        </TagGroup>
         <S.Description>{event.description}</S.Description>
       </S.TextWrapper>
     </S.Wrapper>

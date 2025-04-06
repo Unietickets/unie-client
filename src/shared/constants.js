@@ -41,6 +41,7 @@ export const Colors = {
     SalmonBuff: '#FFA873',
     VividOrange: '#FF6100',
     TreePoppy: '#E08137',
+    CarrotOrange: '#e5921d',
     // pink
     LilacLotion: '#F6308A',
     MacaroonRose: '#F5557B',

@@ -1,8 +1,8 @@
-import { FullInfo } from "@entities/event";
 import * as eventService from "@entities/event/services";
-import * as userService from "@entities/user/services";
 import * as ticketService from "@entities/ticket/services";
 import * as fileService from "@entities/file/services";
+
+import { EventView } from "@/views/events/event";
 
 // Отключаем статическую генерацию для этой страницы
 export const dynamic = 'force-dynamic';
@@ -32,19 +32,6 @@ const mapMockImages = (event) => ({
   description: event.description
 });
 
-const SellerInfo = async ({ id }) => {
-  const data = await userService.getUserById(id);
-
-  return (
-    <span>
-      <span>Seller info</span>
-      name: {data.name}
-      {' '}
-      email: {data.email}
-    </span>
-  )
-}
-
 export default async function Event({
   params,
 }) {
@@ -61,19 +48,6 @@ export default async function Event({
   );
 
   return (
-    <div>
-      <FullInfo event={mapMockImages(event)} />
-      <div>
-        tickets
-      </div>
-      <ul>
-        {ticketsWithPhotos?.map(t => (
-          <div key={t.id}>
-            <SellerInfo id={t.user_id} />
-            <img src={t.photoUrl} alt={`Ticket ${t.id}`} />
-          </div>
-        ))}
-      </ul>
-    </div>
+    <EventView event={mapMockImages(event)} tickets={ticketsWithPhotos} />
   );
 }
