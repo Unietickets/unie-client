@@ -90,9 +90,9 @@ echo "Running database migrations..."\n\
 npx prisma migrate deploy\n\
 \n\
 echo "Starting application..."\n\
-if [ -f "/app/server.js" ]; then\n\
-  NODE_OPTIONS="--experimental-json-modules" exec node .next/standalone/server.js\n\
-else\n\
+# if [ -f "/app/server.js" ]; then\n\
+  # NODE_OPTIONS="--experimental-json-modules" exec node .next/standalone/server.js\n\
+# else\n\
   echo "server.js not found, trying to start with next start"\n\
   NODE_OPTIONS="--experimental-json-modules" exec npx next start\n\
 fi\n\
