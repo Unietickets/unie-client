@@ -58,6 +58,7 @@ export const Colors = {
     Mako: '#515454',
     SanAntonioSage: '#2E2E2E',
     Carbon: '#333333',
+    Nero: '#252525',
     Black: '#000000',
 
     Transparent: 'transparent',

@@ -153,11 +153,21 @@ const getFileLinkById = async (id) => {
   return presignedUrl;
 }
 
+const generateFileLinksToArray = (entitiesArray) => Promise.all(
+  entitiesArray?.map(async (e) => ({
+      ...e,
+      ...(e?.image && {
+        image: await getFileLinkById(e.image)
+      })
+    }))
+  );
+
 export {
   getFiles,
   getPresignedUrls,
   uploadToS3,
   saveFileInfoInDB,
   saveFilesToS3AndDB,
-  getFileLinkById
+  getFileLinkById,
+  generateFileLinksToArray,
 };

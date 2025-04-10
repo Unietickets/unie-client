@@ -3,10 +3,17 @@
 import { useRef, useState } from 'react';
 
 import { PhotoUploader, uploadToServer } from '@/entities/file';
-import { Button, Input, Select } from '@/shared/ui';
+import { Button, Input, Select, Option, SingleValue } from '@/shared/ui';
 
 import { createTicket } from './helpers';
 import * as S from './styles';
+
+const mapEventsToSelectOptions = (events) => events.map((event) => ({
+  value: event.id,
+  label: event.name,
+  date: event.event_date,
+  image: event.image,
+}));
 
 export const CreateTicketForm = ({ user, availableEvents }) => {
   const [previewFiles, setPreviewFiles] = useState([]);
@@ -42,11 +49,12 @@ export const CreateTicketForm = ({ user, availableEvents }) => {
       <label htmlFor='event'>Event</label>
       <Select
         name="event"
-        options={availableEvents}
+        options={mapEventsToSelectOptions(availableEvents)}
         getOptionValue={(option) => option.id}
         getOptionLabel={(option) => option.name}
         value={selectedEvent}
         onChange={(value) => setSelectedEvent(value)}
+        components={{ Option, SingleValue }}
       />
 
       <label htmlFor='description'>Description</label>

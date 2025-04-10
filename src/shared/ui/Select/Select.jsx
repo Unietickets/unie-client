@@ -12,6 +12,7 @@ export const Select = (props) => {
   return (
     <ReactSelect
       theme={getCustomTheme}
+      placeholder='Search'
       {...props}
       components={{
         IndicatorsContainer,

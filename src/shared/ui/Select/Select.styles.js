@@ -1,4 +1,3 @@
-import { theme } from '@/shared/theme';
 import { Colors } from '../../constants';
 
 export const getCustomTheme = (theme) => ({
@@ -18,7 +17,7 @@ export const getCustomTheme = (theme) => ({
 
 const SelectVariants = {
   Outlined: {
-    borderRadius: '4px',
+    borderRadius: '15px',
   },
   Round: {
     borderRadius: '40px',
@@ -43,30 +42,24 @@ export const CUSTOM_STYLES = {
     width: '100%',
   }),
   control: (baseStyles, props) => {
-    const { borderColor } = baseStyles;
     const { isDisabled, selectProps } = props;
-    const { hasError, variant = 'Outlined' } = selectProps;
+    const { variant = 'Outlined' } = selectProps;
 
     return {
       ...baseStyles,
       fontSize: '16px',
       lineHeight: '1em',
-      color: Colors.Black,
+      color: Colors.White,
 
-      borderWidth: '2px',
-      borderColor: getBorderColor(borderColor, selectProps),
+      padding: '5px',
+
+      borderWidth: '1px',
+      borderColor: getBorderColor(Colors.OldYella, selectProps),
       boxShadow: 'none',
-      backgroundColor: isDisabled ? Colors.White : baseStyles.backgroundColor,
+      backgroundColor: isDisabled ? Colors.GreyShingle : Colors.Nero,
       ...SelectVariants[variant],
-      '&:hover:not(:disabled)': {
-        borderColor: hasError ? Colors.VividOrange : Colors.FluorescentOrange,
-      },
       '&:hover': {
-        borderColor: Colors.FluorescentOrange,
         cursor: 'pointer',
-      },
-      '&:focus': {
-        borderColor: hasError ? Colors.VividOrange : baseStyles.backgroundColor,
       },
     };
   },
@@ -98,17 +91,17 @@ export const CUSTOM_STYLES = {
   option: (baseStyles, { isSelected }) => ({
     ...baseStyles,
     padding: '8px 16px',
-    backgroundColor: isSelected ? Colors.OldYella : baseStyles.backgroundColor,
-    color: Colors.Black,
+    backgroundColor: Colors.Carbon,
+    color: Colors.White,
     '&:hover': {
-      backgroundColor: baseStyles.backgroundColor,
+      backgroundColor: Colors.Mako,
     },
   }),
   menu: (base) => ({
     ...base,
-    borderRadius: '2px',
-    border: `1px solid ${Colors.SuperSilver}`,
+    borderRadius: '15px',
     boxShadow: '0px 1px 26px 0px rgba(0, 0, 0, 0.10)',
     zIndex: 11,
+    overflow: 'hidden',
   }),
 };
