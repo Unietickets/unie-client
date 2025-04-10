@@ -46,6 +46,7 @@ model Event {
   event_date        DateTime
   location          String?            @db.VarChar(255)
   description       String?            @db.Text
+  image             String             @db.VarChar(255)
   tickets           Ticket[]
   deals             Deal[]
   recommendations   RecommendedEvent[]
