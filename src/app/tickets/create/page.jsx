@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as userService from '@/entities/user/services';
 import * as eventService from '@/entities/event/services';
-import { CreateTicketPage } from '@features/ticket/create';
+import { CreateTicketForm } from '@features/ticket/create';
 
 // Отключаем статическую генерацию для этой страницы
 export const dynamic = 'force-dynamic';
@@ -15,7 +15,7 @@ export default async function page() {
   return (
     <>
       Create Ticket
-      <CreateTicketPage user={user} availableEvents={availableEvents}/>
+      <CreateTicketForm user={user} availableEvents={availableEvents}/>
     </>
   );
 };

@@ -1,1 +1,1 @@
-export { default as CreateTicketPage } from './page';
+export * from './CreateTicketForm';

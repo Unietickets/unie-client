@@ -8,7 +8,7 @@ import { Button, Input, Select } from '@/shared/ui';
 import { createTicket } from './helpers';
 import * as S from './styles';
 
-const page = ({ user, availableEvents }) => {
+export const CreateTicketForm = ({ user, availableEvents }) => {
   const [previewFiles, setPreviewFiles] = useState([]);
   const fileInputRef = useRef(null);
 
@@ -87,5 +87,3 @@ const page = ({ user, availableEvents }) => {
     </S.Wrapper>
   );
 };
-
-export default page;
