@@ -18,7 +18,6 @@ export default async function page() {
 
   return (
     <>
-      Create Ticket
       <CreateTicketForm user={user} availableEvents={availableEventsWithCorrectImageLinks}/>
     </>
   );

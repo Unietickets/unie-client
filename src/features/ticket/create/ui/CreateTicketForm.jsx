@@ -44,54 +44,99 @@ export const CreateTicketForm = ({ user, availableEvents }) => {
     }
   }
 
+  const isEventChosen = selectedEvent?.value;
+  const isEventInProgress = !selectedEvent?.value && !description && !price;
+
+  const isDescriptionChosen = description.length > 0;
+  const isDescriptionInProgress = isEventChosen && !description && !price;
+
   return (
-    <S.Wrapper onSubmit={handleSubmit}>
-      <label htmlFor='event'>Event</label>
-      <Select
-        name="event"
-        options={mapEventsToSelectOptions(availableEvents)}
-        getOptionValue={(option) => option.id}
-        getOptionLabel={(option) => option.name}
-        value={selectedEvent}
-        onChange={(value) => setSelectedEvent(value)}
-        components={{ Option, SingleValue }}
-      />
+    <S.Form onSubmit={handleSubmit}>
+      <S.Wrapper>
+        <S.Row>
+          <S.FirstLine
+            isDone={isEventChosen}
+            isInProgress={isEventInProgress}
+          />
+          <S.FormTitle>
+            Make your deal with Unie
+          </S.FormTitle>
+        </S.Row>
 
-      <label htmlFor='description'>Description</label>
-      <Input
-        id="description"
-        name='description'
-        type="text"
-        placeholder="Enter description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
+        <S.Row>
+          <S.Circle
+            isDone={isEventChosen}
+            isInProgress={isEventInProgress}
+          >
+            {isEventChosen ? 'Ok' : '1'}
+          </S.Circle>
 
-      <label htmlFor='price'>Price</label>
-      <Input
-        id="price"
-        name='price'
-        type="text"
-        placeholder="Enter price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-      />
+          <S.FieldWithPositionedLabel>
+            <S.Label htmlFor='event'>Event</S.Label>
+            <Select
+              name="event"
+              options={mapEventsToSelectOptions(availableEvents)}
+              getOptionValue={(option) => option.id}
+              getOptionLabel={(option) => option.name}
+              value={selectedEvent}
+              onChange={(value) => setSelectedEvent(value)}
+              components={{ Option, SingleValue }}
+            />
+          </S.FieldWithPositionedLabel>
+        </S.Row>
 
-      <PhotoUploader
-        files={previewFiles}
-        setFiles={setPreviewFiles}
-        fileInputRef={fileInputRef}
-        name="photo"
-      />
+        <S.SecondLine
+          isDone={isDescriptionChosen}
+          isInProgress={isDescriptionInProgress}
+        />
 
-      <Button
-        isRounded
-        size='medium'
-        variant='primary'
-        type='submit'
-      >
-        Create Ticket
-      </Button>
-    </S.Wrapper>
+        <S.Row>
+          <S.Circle
+            isDone={isDescriptionChosen}
+            isInProgress={isDescriptionInProgress}
+          >
+            {isEventChosen ? 'Ok' : '2'}
+          </S.Circle>
+
+          <S.FieldWithPositionedLabel>
+            <S.Label htmlFor='description'>Description</S.Label>
+            <Input
+              id="description"
+              name='description'
+              type="text"
+              placeholder="Enter description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </S.FieldWithPositionedLabel>
+        </S.Row>
+
+        <label htmlFor='price'>Price</label>
+        <Input
+          id="price"
+          name='price'
+          type="text"
+          placeholder="Enter price"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+        />
+
+        <PhotoUploader
+          files={previewFiles}
+          setFiles={setPreviewFiles}
+          fileInputRef={fileInputRef}
+          name="photo"
+        />
+
+        <Button
+          isRounded
+          size='medium'
+          variant='primary'
+          type='submit'
+        >
+          Create Ticket
+        </Button>
+      </S.Wrapper>
+    </S.Form>
   );
 };
