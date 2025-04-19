@@ -13,27 +13,15 @@ model User {
   id                    Int                    @id @default(autoincrement())
   name                  String                 @db.VarChar(255)
   registration_date     DateTime               @default(now())
-  verification_status   VerificationStatus     @default(NotVerified)
-  email                 String                 @unique @db.VarChar(255)
+  email                 String?                @unique @db.VarChar(255)
   password              String                 @db.VarChar(255)
   phone_number          String?                @db.VarChar(20)
   is_active             Boolean                @default(true)
-  verificationDocuments VerificationDocument[]
   transactions          Transaction[]
   tickets               Ticket[]
   dealsAsBuyer          Deal[]                 @relation("BuyerDeals")
   dealsAsSeller         Deal[]                 @relation("SellerDeals")
   RecommendedEvent      RecommendedEvent[]
-}
-
-model VerificationDocument {
-  id                  Int                @id @default(autoincrement())
-  user_id             Int
-  upload_date         DateTime           @default(now())
-  document_image      String?            @db.VarChar(255)
-  verification_status VerificationStatus @default(NotVerified)
-
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model Event {
@@ -46,7 +34,7 @@ model Event {
   event_date        DateTime
   location          String?            @db.VarChar(255)
   description       String?            @db.Text
-  image             String             @db.VarChar(255)
+  photos            EventPhoto[]
   tickets           Ticket[]
   deals             Deal[]
   recommendations   RecommendedEvent[]
@@ -66,13 +54,15 @@ model Transaction {
 model Ticket {
   id          Int          @id @default(autoincrement())
   user_id     Int
+  buyer_id    Int?
   event_id    Int
   upload_date DateTime     @default(now())
   image       String?      @db.VarChar(255)
   status      TicketStatus @default(available)
   is_verified Boolean      @default(false)
-  price       Decimal?     @db.Decimal(10, 2)
+  price       Decimal      @db.Decimal(10, 2)
   description String?
+  deal        DealTicket?
 
   user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
   event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
@@ -86,10 +76,29 @@ model Deal {
   deal_date DateTime   @default(now())
   status    DealStatus @default(in_progress)
   price     Decimal    @db.Decimal(10, 2)
+  tickets   DealTicket[]
 
   event  Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
   buyer  User  @relation("BuyerDeals", fields: [buyer_id], references: [id], onDelete: Cascade)
   seller User  @relation("SellerDeals", fields: [seller_id], references: [id], onDelete: Cascade)
+}
+
+model EventPhoto {
+  id       Int    @id @default(autoincrement())
+  event_id Int
+  file_id  String
+
+  event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  file  File  @relation(fields: [file_id], references: [id], onDelete: Cascade)
+}
+
+model DealTicket {
+  id        Int @id @default(autoincrement())
+  deal_id   Int
+  ticket_id Int @unique
+
+  deal   Deal   @relation(fields: [deal_id], references: [id], onDelete: Cascade)
+  ticket Ticket @relation(fields: [ticket_id], references: [id])
 }
 
 model RecommendedEvent {
@@ -106,18 +115,13 @@ model RecommendedEvent {
 }
 
 model File {
-  id           String   @id @default(uuid())
+  id           String       @id @default(uuid())
   bucket       String
-  fileName     String   @unique
+  fileName     String       @unique
   originalName String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime     @default(now())
   size         Int
-}
-
-enum VerificationStatus {
-  NotVerified
-  Verified
-  Reupload
+  eventPhotos  EventPhoto[]
 }
 
 enum EventStatus {
