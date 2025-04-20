@@ -37,25 +37,10 @@ export const getUserTickets = async ({ userId }) => {
   };
 }
 
-export const createTicket = async ({
-  userId,
-  eventId,
-  photos,
-  description,
-  price
-}) => {
-  const numberPrice = Number(price);
-  const isPriceNotNumber = Number.isNaN(numberPrice);
+export const getTicketById = async ({ ticketId }) => {
+  return ticketRepository.getTicketById(ticketId);
+};
 
-  if (isPriceNotNumber) {
-    throw new Error("Price must be number");
-  }
-
-  return ticketRepository.createTicket({
-    userId,
-    eventId,
-    photos,
-    description,
-    price: numberPrice
-  });
-}
+export const updateTicket = async (ticketId, data) => {
+  return ticketRepository.updateTicket(ticketId, data);
+};
