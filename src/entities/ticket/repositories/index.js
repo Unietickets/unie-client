@@ -67,3 +67,13 @@ export const updateTicket = async (ticketId, data) => {
     data,
   });
 };
+
+export const getUserTicketsById = async (userId) => {
+  return await prisma.ticket.findMany({
+    where: {
+      user_id: {
+        equals: userId
+      }
+    }
+  });
+}

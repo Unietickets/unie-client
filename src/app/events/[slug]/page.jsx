@@ -1,3 +1,5 @@
+import React from 'react';
+
 import * as eventService from "@entities/event/services";
 import * as ticketService from "@entities/ticket/services";
 import * as fileService from "@entities/file/services";
@@ -37,9 +39,9 @@ export default async function Event({
 }) {
   const slug = (await params).slug;
   const event = await eventService.getEventById(Number(slug));
+  const mockImageEvent = mapMockImages(event);
   const tickets = await ticketService.getEventTickets(Number(slug));
 
-  // Получаем все фото билетов параллельно
   const ticketsWithPhotos = await Promise.all(
     tickets?.map(async (t) => ({
       ...t,
