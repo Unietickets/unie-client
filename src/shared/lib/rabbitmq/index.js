@@ -243,6 +243,55 @@ class RabbitMQService {
   }
 
   /**
+   * Отправка сообщения с паттерном в очередь (для микросервисов NestJS)
+   * @param {string} queueName - Название очереди
+   * @param {string} pattern - Паттерн сообщения (для маршрутизации в NestJS)
+   * @param {Object} data - Данные сообщения
+   * @param {Object} options - Опции для отправки сообщения
+   */
+  async sendMessageWithPattern(queueName, pattern, data, options = {}) {
+    console.log(`Sending message with pattern '${pattern}' to queue '${queueName}'`);
+    
+    if (!this.isConnected) {
+      await this.init();
+    }
+    
+    try {
+      // Создаем очередь, если она не существует
+      await this.createQueue(queueName);
+      
+      // Формируем сообщение в формате, который ожидает NestJS
+      const message = {
+        pattern,
+        data
+      };
+      
+      console.log(`Message content: ${JSON.stringify(message)}`);
+      
+      // Отправляем сообщение
+      const success = this.channel.sendToQueue(
+        queueName,
+        Buffer.from(JSON.stringify(message)),
+        {
+          persistent: true, // Сообщение сохраняется даже при перезапуске брокера
+          ...options
+        }
+      );
+      
+      if (success) {
+        console.log(`Message with pattern '${pattern}' sent to queue '${queueName}' successfully`);
+      } else {
+        console.warn(`Failed to send message with pattern '${pattern}' to queue '${queueName}'`);
+      }
+      
+      return success;
+    } catch (error) {
+      console.error(`Error sending message with pattern '${pattern}' to queue '${queueName}':`, error.message);
+      return false;
+    }
+  }
+
+  /**
    * Закрытие соединения с RabbitMQ
    */
   async close() {

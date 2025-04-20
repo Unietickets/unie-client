@@ -17,8 +17,14 @@ export function Checkout({ amount, currency }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [clientSecret, setClientSecret] = useState('');
+  const [ticketId, setTicketId] = useState(null);
 
   useEffect(() => {
+    // Получаем ticketId из URL
+    const url = new URL(window.location.href);
+    const ticketIdParam = url.searchParams.get('ticketId');
+    setTicketId(ticketIdParam);
+
     fetch("/api/create-payment-intent", {
       method: 'POST',
       headers: {
@@ -50,7 +56,8 @@ export function Checkout({ amount, currency }) {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: `${ORIGIN}/payment/success?amount=${amount}`
+        // Добавляем ticketId в URL для обработки на сервере
+        return_url: `${ORIGIN}/api/payment/success?ticketId=${ticketId}&amount=${amount}`
       }
     });
 

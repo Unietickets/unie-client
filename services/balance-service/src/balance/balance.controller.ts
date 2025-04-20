@@ -55,6 +55,19 @@ export class BalanceController {
     return this.balanceService.cancelReservation(Number(userId), Number(transactionId));
   }
 
+  @Post('user/:userId/pending')
+  async addToPendingBalance(
+    @Param('userId') userId: string,
+    @Body('amount') amount: string,
+    @Body('activationDate') activationDate: string,
+  ) {
+    return this.balanceService.addToPendingBalance(
+      Number(userId), 
+      amount, 
+      new Date(activationDate)
+    );
+  }
+
   @Get('user/:userId/transactions')
   async getUserTransactions(@Param('userId') userId: string) {
     return this.balanceService.getUserTransactions(Number(userId));
@@ -181,6 +194,53 @@ export class BalanceController {
     } catch (error) {
       this.logger.error(`Error processing balance.reservation.cancel: ${error.message}`, error.stack);
       channel.nack(originalMsg);
+      throw error;
+    }
+  }
+
+  @MessagePattern('balance.pending.add')
+  async addToPendingBalanceMessage(
+    @Payload() data: { userId: number; amount: string; activationDate: string },
+    @Ctx() context: RmqContext,
+  ) {
+    console.log('=======================================');
+    console.log('CONTROLLER: Received balance.pending.add message:');
+    console.log('Data:', JSON.stringify(data));
+    console.log('=======================================');
+    
+    this.logger.log(`Received balance.pending.add message: ${JSON.stringify(data)}`);
+    
+    const channel = context.getChannelRef();
+    const originalMsg = context.getMessage();
+    
+    try {
+      console.log('Calling balanceService.addToPendingBalance with:');
+      console.log('userId:', data.userId);
+      console.log('amount:', data.amount);
+      console.log('activationDate:', new Date(data.activationDate));
+      
+      const result = await this.balanceService.addToPendingBalance(
+        data.userId, 
+        data.amount, 
+        new Date(data.activationDate)
+      );
+      
+      console.log('Balance service returned result:', JSON.stringify(result));
+      channel.ack(originalMsg);
+      console.log('Message acknowledged');
+      
+      return result;
+    } catch (error) {
+      console.error('=======================================');
+      console.error('CONTROLLER ERROR processing balance.pending.add:');
+      console.error('Error message:', error.message);
+      console.error('Stack:', error.stack);
+      console.error('=======================================');
+      
+      this.logger.error(`Error processing balance.pending.add: ${error.message}`, error.stack);
+      channel.nack(originalMsg);
+      console.log('Message NOT acknowledged (nack)');
+      
       throw error;
     }
   }

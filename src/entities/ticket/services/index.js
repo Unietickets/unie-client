@@ -25,6 +25,12 @@ export const getEventTickets = async ({ eventId }) => {
   return serializeTickets(ticketsWithSellers);
 }
 
+export const getAvailableEventTickets = async ({ eventId }) => {
+  const allTickets = await getEventTickets({ eventId });
+
+  return allTickets.filter(ticket => ticket.status === 'available');
+};
+
 export const getUserTickets = async ({ userId }) => {
   const available = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'available' });
   const reserved = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'reserved' });

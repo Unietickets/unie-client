@@ -17,7 +17,7 @@ export const TicketList = (props) => {
       </S.Header>
       <S.TicketList>
         {tickets.map(t => {
-          const href = `${ROUTES.payment.href}?amount=${t.price}&currency=${t.price_currency ?? 'usd'}`;
+          const href = `${ROUTES.payment.href}?amount=${t.price}&currency=${t.price_currency ?? 'usd'}&ticketId=${t.id}`;
 
           return (
             <S.TicketItem key={t.id}>

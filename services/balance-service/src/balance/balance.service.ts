@@ -10,7 +10,11 @@ export class BalanceService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly rabbitMQService: RabbitMQService,
-  ) {}
+  ) {
+    // Проверяем, что логгер работает при инициализации сервиса
+    console.log('=== BALANCE SERVICE INITIALIZED ===');
+    this.logger.log('Balance service initialized');
+  }
 
   /**
    * Получение баланса пользователя
@@ -114,6 +118,159 @@ export class BalanceService {
   }
 
   /**
+   * Увеличение неактивного баланса продавца с установкой даты активации
+   * @param userId ID пользователя (продавца)
+   * @param amount Сумма для добавления в неактивный баланс
+   * @param activationDate Дата, когда баланс должен стать активным
+   * @returns Обновленный баланс пользователя
+   */
+  async addToPendingBalance(
+    userId: number,
+    amount: string | number,
+    activationDate: Date
+  ) {
+    // Прямой вывод в консоль для отладки
+    console.log('=======================================');
+    console.log(`BALANCE SERVICE: addToPendingBalance CALLED`);
+    console.log(`userId: ${userId}, amount: ${amount}, activationDate: ${activationDate}`);
+    console.log('=======================================');
+    
+    try {
+      this.logger.log(`[addToPendingBalance] Starting process for userId=${userId}, amount=${amount}, activationDate=${activationDate}`);
+      
+      const amountDecimal = new Decimal(amount);
+
+      if (amountDecimal.isNegative() || amountDecimal.isZero()) {
+        console.error(`ERROR: Invalid amount: ${amount} - must be positive`);
+        this.logger.error(`[addToPendingBalance] Invalid amount: ${amount} - must be positive`);
+        throw new Error('Amount must be positive');
+      }
+
+      // Находим баланс пользователя
+      console.log(`Searching for existing balance for userId=${userId}`);
+      this.logger.log(`[addToPendingBalance] Searching for existing balance for userId=${userId}`);
+      const userBalance = await this.prisma.userBalance.findFirst({
+        where: { user_id: userId },
+      });
+
+      console.log(`User balance found: ${JSON.stringify(userBalance)}`);
+
+      let newPendingBalance: Decimal;
+      let currentActiveBalance: Decimal;
+      let updatedBalance;
+
+      if (!userBalance) {
+        console.log(`No existing balance found for userId=${userId}, creating new balance`);
+        this.logger.log(`[addToPendingBalance] No existing balance found for userId=${userId}, creating new balance`);
+        // Если баланс не существует, создаем новый с нулевым активным балансом и указанной датой активации
+        newPendingBalance = amountDecimal;
+        currentActiveBalance = new Decimal(0);
+        
+        // Создаем новую запись баланса пользователя
+        try {
+          updatedBalance = await this.prisma.userBalance.create({
+            data: {
+              user_id: userId,
+              active_balance: currentActiveBalance.toFixed(2),
+              pending_balance: newPendingBalance.toFixed(2),
+              activation_date: activationDate,
+            },
+          });
+          console.log(`Successfully created new balance: ${JSON.stringify(updatedBalance)}`);
+          this.logger.log(`[addToPendingBalance] Successfully created new balance for userId=${userId}: ${JSON.stringify(updatedBalance)}`);
+        } catch (createError) {
+          console.error(`ERROR creating balance: ${createError.message}`, createError);
+          this.logger.error(`[addToPendingBalance] Error creating balance: ${createError.message}`, createError.stack);
+          throw createError;
+        }
+      } else {
+        this.logger.log(`[addToPendingBalance] Existing balance found for userId=${userId}: ${JSON.stringify(userBalance)}`);
+        // Увеличиваем неактивный баланс
+        newPendingBalance = new Decimal(userBalance.pending_balance).plus(amountDecimal);
+        currentActiveBalance = new Decimal(userBalance.active_balance);
+        
+        // Обновляем существующий баланс
+        try {
+          updatedBalance = await this.prisma.userBalance.update({
+            where: { id: userBalance.id },
+            data: {
+              active_balance: currentActiveBalance.toFixed(2),
+              pending_balance: newPendingBalance.toFixed(2),
+              activation_date: activationDate,
+              updated_at: new Date(),
+            },
+          });
+          console.log(`Successfully updated balance: ${JSON.stringify(updatedBalance)}`);
+          this.logger.log(`[addToPendingBalance] Successfully updated balance for userId=${userId}: ${JSON.stringify(updatedBalance)}`);
+        } catch (updateError) {
+          console.error(`ERROR updating balance: ${updateError.message}`, updateError);
+          this.logger.error(`[addToPendingBalance] Error updating balance: ${updateError.message}`, updateError.stack);
+          throw updateError;
+        }
+      }
+
+      // Создаем транзакцию
+      console.log(`Creating transaction for userId=${userId}, amount=${amountDecimal.toFixed(2)}`);
+      this.logger.log(`[addToPendingBalance] Creating transaction for userId=${userId}, amount=${amountDecimal.toFixed(2)}`);
+      let transaction;
+      try {
+        transaction = await this.prisma.transaction.create({
+          data: {
+            user_id: userId,
+            direction: 'deposit',
+            amount: amountDecimal.toFixed(2),
+            status: 'in_process',
+          },
+        });
+        console.log(`Transaction created: ${JSON.stringify(transaction)}`);
+        this.logger.log(`[addToPendingBalance] Transaction created: ${JSON.stringify(transaction)}`);
+      } catch (transactionError) {
+        console.error(`ERROR creating transaction: ${transactionError.message}`, transactionError);
+        this.logger.error(`[addToPendingBalance] Error creating transaction: ${transactionError.message}`, transactionError.stack);
+        throw transactionError;
+      }
+
+      // Публикуем событие о добавлении в неактивный баланс
+      console.log(`Emitting balance.pending.added event for userId=${userId}`);
+      this.logger.log(`[addToPendingBalance] Emitting balance.pending.added event for userId=${userId}`);
+      try {
+        await this.rabbitMQService.emit('balance.pending.added', {
+          userId,
+          amount: amountDecimal.toString(),
+          transactionId: transaction.id,
+          activationDate: activationDate.toISOString(),
+          newPendingBalance: newPendingBalance.toString(),
+          timestamp: new Date().toISOString(),
+        });
+        console.log(`Event emitted successfully`);
+        this.logger.log(`[addToPendingBalance] Event emitted successfully`);
+      } catch (emitError) {
+        console.error(`ERROR emitting event: ${emitError.message}`, emitError);
+        this.logger.error(`[addToPendingBalance] Error emitting event: ${emitError.message}`, emitError.stack);
+        // Продолжаем выполнение, даже если не удалось отправить событие
+      }
+
+      console.log(`Process completed successfully for userId=${userId}`);
+      this.logger.log(`[addToPendingBalance] Process completed successfully for userId=${userId}`);
+      return {
+        userId,
+        activeBalance: currentActiveBalance.toString(),
+        pendingBalance: newPendingBalance.toString(),
+        activationDate,
+        transactionId: transaction.id,
+      };
+    } catch (error) {
+      console.error('=======================================');
+      console.error(`BALANCE SERVICE ERROR: ${error.message}`);
+      console.error(error);
+      console.error('=======================================');
+      
+      this.logger.error(`[addToPendingBalance] Error adding to pending balance: ${error.message}`, error.stack);
+      throw new Error(`Failed to add to pending balance: ${error.message}`);
+    }
+  }
+
+  /**
    * Пополнение баланса пользователя
    * @param userId ID пользователя
    * @param amount Сумма пополнения
@@ -122,7 +279,7 @@ export class BalanceService {
   async depositToUserBalance(userId: number, amount: string | number) {
     try {
       const amountDecimal = new Decimal(amount);
-      
+
       if (amountDecimal.isNegative() || amountDecimal.isZero()) {
         throw new Error('Deposit amount must be positive');
       }
@@ -184,7 +341,7 @@ export class BalanceService {
   async withdrawFromUserBalance(userId: number, amount: string | number) {
     try {
       const amountDecimal = new Decimal(amount);
-      
+
       if (amountDecimal.isNegative() || amountDecimal.isZero()) {
         throw new Error('Withdrawal amount must be positive');
       }
@@ -252,7 +409,7 @@ export class BalanceService {
   async reserveUserBalance(userId: number, amount: string | number) {
     try {
       const amountDecimal = new Decimal(amount);
-      
+
       if (amountDecimal.isNegative() || amountDecimal.isZero()) {
         throw new Error('Reserve amount must be positive');
       }

@@ -12,7 +12,7 @@ services:
       - "5050:80"
     networks:
       - app_network
-      
+
   rabbitmq:
     ports:
       - "5672:5672"   # AMQP протокол
@@ -36,57 +36,3 @@ services:
     depends_on:
       - postgres
       - rabbitmq
-
-  # nextjs:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: deps
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
-  #     - /app/.next
-  #   command: >
-  #     sh -c "
-  #       echo 'Waiting for database...' &&
-  #       while ! nc -z postgres 5432; do
-  #         sleep 1
-  #       done &&
-  #       echo 'Database is up!' &&
-  #       npx prisma generate &&
-  #       npx prisma migrate deploy &&
-  #       npm run dev
-  #     "
-  #   environment:
-  #     - NODE_ENV=development
-  #     - MODE=development
-  #     - DATABASE_URL=${DATABASE_URL}
-  #     - DATABASE_HOST=${DATABASE_HOST}
-  #     - DATABASE_PORT=${DATABASE_PORT}
-  #     - DATABASE_USER=${DATABASE_USER}
-  #     - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-  #     - DATABASE_NAME=${DATABASE_NAME}
-  #     - NEXTAUTH_URL=${NEXTAUTH_URL}
-  #     - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-  #     - S3_BUCKET_NAME=${S3_BUCKET_NAME}
-  #     - S3_ENDPOINT=${S3_ENDPOINT}
-  #     - S3_PORT=${S3_PORT}
-  #     - S3_ACCESS_KEY=${S3_ACCESS_KEY}
-  #     - S3_SECRET_KEY=${S3_SECRET_KEY}
-  #     - S3_USE_SSL=${S3_USE_SSL}
-  #     - PGADMIN_EMAIL=${PGADMIN_EMAIL}
-  #     - PGADMIN_PASSWORD=${PGADMIN_PASSWORD}
-  #     - RABBITMQ_URL=amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-password}@rabbitmq:5672
-  #   ports:
-  #     - "3000:3000"
-  #     - "5555:5555"
-  #   healthcheck:
-  #     test: ["CMD", "nc", "-z", "localhost", "3000"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   depends_on:
-  #     - postgres
-  #     - rabbitmq
-  #   networks:
-  #     - app_network

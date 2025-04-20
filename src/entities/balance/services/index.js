@@ -4,19 +4,15 @@ import rabbitmqService from '@/shared/lib/rabbitmq';
 
 /**
  * Получение баланса пользователя
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
+ * @param {number} userId - ID пользователя
  * @returns {Promise<Object>} - Информация о балансе пользователя
  */
-export const getUserBalance = async ({ userId }) => {
+export const getUserBalance = async (userId) => {
   try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.get',
-      data: { userId }
-    });
-
-    return response;
+    await rabbitmqService.init();
+    
+    const result = await rabbitmqService.sendAndReceive('balance.get', { userId });
+    return result;
   } catch (error) {
     console.error('Error getting user balance:', error);
     throw new Error(`Failed to get user balance: ${error.message}`);
@@ -24,21 +20,69 @@ export const getUserBalance = async ({ userId }) => {
 };
 
 /**
- * Пополнение баланса пользователя
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
- * @param {string} params.amount - Сумма пополнения
- * @returns {Promise<Object>} - Обновленный баланс пользователя
+ * Добавление средств в неактивный баланс продавца с датой активации
+ * @param {number} userId - ID пользователя (продавца)
+ * @param {number|string} amount - Сумма для добавления в неактивный баланс
+ * @param {Date} activationDate - Дата, когда баланс должен стать активным
+ * @returns {Promise<Object>} - Результат операции
  */
-export const depositToUserBalance = async ({ userId, amount }) => {
+export const addToPendingBalance = async (userId, amount, activationDate) => {
+  console.log('=======================================');
+  console.log('CLIENT: addToPendingBalance called with params:');
+  console.log('userId:', userId);
+  console.log('amount:', amount);
+  console.log('activationDate:', activationDate);
+  console.log('=======================================');
+  
   try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.deposit',
-      data: { userId, amount }
-    });
+    console.log('Initializing RabbitMQ connection...');
+    await rabbitmqService.init();
+    console.log('RabbitMQ connection initialized');
+    
+    // Подготавливаем данные для отправки
+    const messageData = {
+      userId,
+      amount: amount.toString(),
+      activationDate: activationDate.toISOString()
+    };
+    
+    // Используем новый метод для отправки сообщения с паттерном
+    console.log('Using sendMessageWithPattern to send message to balance_queue');
+    
+    // Отправляем сообщение в очередь с указанием паттерна
+    const result = await rabbitmqService.sendMessageWithPattern(
+      'balance_queue',       // имя очереди
+      'balance.pending.add', // паттерн сообщения
+      messageData            // данные сообщения
+    );
+    
+    console.log('Message sent to queue, result:', result);
+    return result;
+  } catch (error) {
+    console.error('=======================================');
+    console.error('ERROR adding to pending balance:', error);
+    console.error('Stack:', error.stack);
+    console.error('=======================================');
+    throw new Error(`Failed to add to pending balance: ${error.message}`);
+  }
+};
 
-    return response;
+/**
+ * Пополнение баланса пользователя
+ * @param {number} userId - ID пользователя
+ * @param {number|string} amount - Сумма пополнения
+ * @returns {Promise<Object>} - Результат операции
+ */
+export const depositToUserBalance = async (userId, amount) => {
+  try {
+    await rabbitmqService.init();
+    
+    const result = await rabbitmqService.sendToQueue('balance.deposit', {
+      userId,
+      amount: amount.toString()
+    });
+    
+    return result;
   } catch (error) {
     console.error('Error depositing to user balance:', error);
     throw new Error(`Failed to deposit to user balance: ${error.message}`);
@@ -47,109 +91,22 @@ export const depositToUserBalance = async ({ userId, amount }) => {
 
 /**
  * Списание с баланса пользователя
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
- * @param {string} params.amount - Сумма списания
- * @returns {Promise<Object>} - Обновленный баланс пользователя
+ * @param {number} userId - ID пользователя
+ * @param {number|string} amount - Сумма списания
+ * @returns {Promise<Object>} - Результат операции
  */
-export const withdrawFromUserBalance = async ({ userId, amount }) => {
+export const withdrawFromUserBalance = async (userId, amount) => {
   try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.withdraw',
-      data: { userId, amount }
+    await rabbitmqService.init();
+    
+    const result = await rabbitmqService.sendToQueue('balance.withdraw', {
+      userId,
+      amount: amount.toString()
     });
-
-    return response;
+    
+    return result;
   } catch (error) {
     console.error('Error withdrawing from user balance:', error);
     throw new Error(`Failed to withdraw from user balance: ${error.message}`);
-  }
-};
-
-/**
- * Резервирование средств на балансе пользователя
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
- * @param {string} params.amount - Сумма резервирования
- * @returns {Promise<Object>} - Обновленный баланс пользователя
- */
-export const reserveUserBalance = async ({ userId, amount }) => {
-  try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.reserve',
-      data: { userId, amount }
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Error reserving user balance:', error);
-    throw new Error(`Failed to reserve user balance: ${error.message}`);
-  }
-};
-
-/**
- * Подтверждение резервирования средств
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
- * @param {number} params.transactionId - ID транзакции
- * @returns {Promise<Object>} - Обновленный баланс пользователя
- */
-export const confirmReservation = async ({ userId, transactionId }) => {
-  try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.reservation.confirm',
-      data: { userId, transactionId }
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Error confirming reservation:', error);
-    throw new Error(`Failed to confirm reservation: ${error.message}`);
-  }
-};
-
-/**
- * Отмена резервирования средств
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
- * @param {number} params.transactionId - ID транзакции
- * @returns {Promise<Object>} - Обновленный баланс пользователя
- */
-export const cancelReservation = async ({ userId, transactionId }) => {
-  try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.reservation.cancel',
-      data: { userId, transactionId }
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Error cancelling reservation:', error);
-    throw new Error(`Failed to cancel reservation: ${error.message}`);
-  }
-};
-
-/**
- * Получение истории транзакций пользователя
- * @param {Object} params - Параметры запроса
- * @param {number} params.userId - ID пользователя
- * @returns {Promise<Array>} - История транзакций пользователя
- */
-export const getUserTransactions = async ({ userId }) => {
-  try {
-    // Отправляем запрос к микросервису баланса через RabbitMQ
-    const response = await rabbitmqService.sendToQueue('balance_queue', {
-      pattern: 'balance.transactions.get',
-      data: { userId }
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Error getting user transactions:', error);
-    throw new Error(`Failed to get user transactions: ${error.message}`);
   }
 };
