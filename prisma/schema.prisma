@@ -6,22 +6,23 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["clientExtensions"]
-  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "rhel-openssl-1.0.x", "linux-arm64-openssl-3.0.x"]
+  binaryTargets   = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "rhel-openssl-1.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
 model User {
-  id                    Int                    @id @default(autoincrement())
-  name                  String                 @db.VarChar(255)
-  registration_date     DateTime               @default(now())
-  email                 String?                @unique @db.VarChar(255)
-  password              String                 @db.VarChar(255)
-  phone_number          String?                @db.VarChar(20)
-  is_active             Boolean                @default(true)
-  transactions          Transaction[]
-  tickets               Ticket[]
-  dealsAsBuyer          Deal[]                 @relation("BuyerDeals")
-  dealsAsSeller         Deal[]                 @relation("SellerDeals")
-  RecommendedEvent      RecommendedEvent[]
+  id                Int                @id @default(autoincrement())
+  name              String             @db.VarChar(255)
+  registration_date DateTime           @default(now())
+  email             String?            @unique @db.VarChar(255)
+  password          String             @db.VarChar(255)
+  phone_number      String?            @db.VarChar(20)
+  is_active         Boolean            @default(true)
+  transactions      Transaction[]
+  tickets           Ticket[]
+  dealsAsBuyer      Deal[]             @relation("BuyerDeals")
+  dealsAsSeller     Deal[]             @relation("SellerDeals")
+  RecommendedEvent  RecommendedEvent[]
+  UserBalance       UserBalance[]
 }
 
 model Event {
@@ -69,13 +70,13 @@ model Ticket {
 }
 
 model Deal {
-  id        Int        @id @default(autoincrement())
+  id        Int          @id @default(autoincrement())
   event_id  Int
   buyer_id  Int
   seller_id Int
-  deal_date DateTime   @default(now())
-  status    DealStatus @default(in_progress)
-  price     Decimal    @db.Decimal(10, 2)
+  deal_date DateTime     @default(now())
+  status    DealStatus   @default(in_progress)
+  price     Decimal      @db.Decimal(10, 2)
   tickets   DealTicket[]
 
   event  Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
@@ -122,6 +123,18 @@ model File {
   createdAt    DateTime     @default(now())
   size         Int
   eventPhotos  EventPhoto[]
+}
+
+model UserBalance {
+  id              Int      @id @default(autoincrement())
+  user_id         Int
+  active_balance  Decimal  @db.Decimal(10, 2)
+  pending_balance Decimal  @db.Decimal(10, 2)
+  activation_date DateTime
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 enum EventStatus {
