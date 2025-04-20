@@ -43,6 +43,19 @@ export const getUserTickets = async ({ userId }) => {
   };
 }
 
+export const getUserActiveTickets = async ({ userId }) => {
+  const tickets = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'available' });
+
+  return serializeTickets(tickets) ?? [];
+};
+
+export const getUserInactiveTickets = async ({ userId }) => {
+  const reservedTickets = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'reserved' });
+  const soldTickets = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'sold' });
+
+  return serializeTickets([...reservedTickets, ...soldTickets]) ?? [];
+};
+
 export const getTicketById = async ({ ticketId }) => {
   return ticketRepository.getTicketById(ticketId);
 };
