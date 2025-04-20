@@ -12,6 +12,30 @@ services:
       - "5050:80"
     networks:
       - app_network
+      
+  rabbitmq:
+    ports:
+      - "5672:5672"   # AMQP протокол
+      - "15672:15672" # Веб-интерфейс управления
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-admin}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-password}
+
+  balance-service:
+    build:
+      context: ./services/balance-service
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ./services/balance-service:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - rabbitmq
 
   # nextjs:
   #   build:
@@ -52,6 +76,7 @@ services:
   #     - S3_USE_SSL=${S3_USE_SSL}
   #     - PGADMIN_EMAIL=${PGADMIN_EMAIL}
   #     - PGADMIN_PASSWORD=${PGADMIN_PASSWORD}
+  #     - RABBITMQ_URL=amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-password}@rabbitmq:5672
   #   ports:
   #     - "3000:3000"
   #     - "5555:5555"
@@ -62,5 +87,6 @@ services:
   #     retries: 5
   #   depends_on:
   #     - postgres
+  #     - rabbitmq
   #   networks:
   #     - app_network

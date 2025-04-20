@@ -3,6 +3,27 @@ services:
     restart: always
     ports: []  # Закрываем внешние порты
 
+  rabbitmq:
+    restart: always
+    ports: []  # Закрываем внешние порты в продакшене
+
+  balance-service:
+    build:
+      context: ./services/balance-service
+      dockerfile: Dockerfile
+      target: production
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:5432/${DATABASE_NAME}
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-password}@rabbitmq:5672
+    ports: []  # Закрываем внешние порты в продакшене
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - app_network
+
   nextjs:
     build:
       context: .
@@ -11,6 +32,7 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-password}@rabbitmq:5672
     healthcheck:
       test: ["CMD", "nc", "-z", "localhost", "3000"]
       interval: 10s
@@ -18,6 +40,7 @@ services:
       retries: 5
     depends_on:
       - postgres
+      - rabbitmq
     networks:
       - app_network
 
