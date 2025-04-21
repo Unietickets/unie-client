@@ -17,6 +17,10 @@ model User {
   password          String             @db.VarChar(255)
   phone_number      String?            @db.VarChar(20)
   is_active         Boolean            @default(true)
+  reset_token       String?
+  reset_token_exp   DateTime?
+  verification_code String?
+  verification_code_exp DateTime?
   transactions      Transaction[]
   tickets           Ticket[]
   dealsAsBuyer      Deal[]             @relation("BuyerDeals")

@@ -3,7 +3,7 @@ version: '3.8'
 x-init-dirs: &init-dirs
   condition: service_healthy
   command: ./init-docker-dirs.sh
-  
+
 services:
   postgres:
     image: postgres:13.3
@@ -105,6 +105,26 @@ services:
     depends_on:
       - postgres
       - rabbitmq
+    networks:
+      - app_network
+
+  smtp-service:
+    build:
+      context: ./services/smtp-service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      - NODE_ENV=docker
+      - DATABASE_URL=postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres:5432/${DATABASE_NAME}
+      - RABBITMQ_URL=amqp://${RABBITMQ_USER:-admin}:${RABBITMQ_PASSWORD:-password}@rabbitmq:5672
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USER=far20022002@mail.ru
+      - SMTP_PASSWORD=password
+      - SMTP_FROM=noreply@unie.com
+      - FRONTEND_URL=http://localhost:3000
     networks:
       - app_network
 
