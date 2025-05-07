@@ -25,6 +25,12 @@ export const getEventTickets = async ({ eventId }) => {
   return serializeTickets(ticketsWithSellers);
 }
 
+export const getAvailableEventTickets = async ({ eventId }) => {
+  const allTickets = await getEventTickets({ eventId });
+
+  return allTickets.filter(ticket => ticket.status === 'available');
+};
+
 export const getUserTickets = async ({ userId }) => {
   const available = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'available' });
   const reserved = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'reserved' });
@@ -37,25 +43,23 @@ export const getUserTickets = async ({ userId }) => {
   };
 }
 
-export const createTicket = async ({
-  userId,
-  eventId,
-  photos,
-  description,
-  price
-}) => {
-  const numberPrice = Number(price);
-  const isPriceNotNumber = Number.isNaN(numberPrice);
+export const getUserActiveTickets = async ({ userId }) => {
+  const tickets = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'available' });
 
-  if (isPriceNotNumber) {
-    throw new Error("Price must be number");
-  }
+  return serializeTickets(tickets) ?? [];
+};
 
-  return ticketRepository.createTicket({
-    userId,
-    eventId,
-    photos,
-    description,
-    price: numberPrice
-  });
-}
+export const getUserInactiveTickets = async ({ userId }) => {
+  const reservedTickets = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'reserved' });
+  const soldTickets = await ticketRepository.getTicketByUserIdAndStatus({ userId, status: 'sold' });
+
+  return serializeTickets([...reservedTickets, ...soldTickets]) ?? [];
+};
+
+export const getTicketById = async ({ ticketId }) => {
+  return ticketRepository.getTicketById(ticketId);
+};
+
+export const updateTicket = async (ticketId, data) => {
+  return ticketRepository.updateTicket(ticketId, data);
+};

@@ -3,6 +3,8 @@
 import React from 'react';
 import Link from 'next/link';
 
+import { ROUTES } from '@/core/routes';
+
 import * as S from './styles';
 
 export const TicketList = (props) => {
@@ -14,16 +16,19 @@ export const TicketList = (props) => {
         Buy a ticket
       </S.Header>
       <S.TicketList>
-        {tickets.map(t => (
-          <S.TicketItem key={t.id}>
-            <S.Ticket>
-              <span>{t.seller.name}</span>
-              <span>{t.price} $</span>
-              {/* todo добавить страницу покупки билета */}
-              <Link href={`/tickets/buy/${t.id}`}>Buy</Link>
-            </S.Ticket>
-          </S.TicketItem>
-        ))}
+        {tickets.map(t => {
+          const href = `${ROUTES.payment.href}?amount=${t.price}&currency=${t.price_currency ?? 'usd'}&ticketId=${t.id}`;
+
+          return (
+            <S.TicketItem key={t.id}>
+              <S.Ticket>
+                <span>{t.seller.name}</span>
+                <span>{t.price} $</span>
+                <Link href={href}>Buy</Link>
+              </S.Ticket>
+            </S.TicketItem>
+          )
+        })}
       </S.TicketList>
     </S.Wrapper>
   )

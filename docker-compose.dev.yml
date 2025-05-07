@@ -13,54 +13,26 @@ services:
     networks:
       - app_network
 
-  # nextjs:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #     target: deps
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
-  #     - /app/.next
-  #   command: >
-  #     sh -c "
-  #       echo 'Waiting for database...' &&
-  #       while ! nc -z postgres 5432; do
-  #         sleep 1
-  #       done &&
-  #       echo 'Database is up!' &&
-  #       npx prisma generate &&
-  #       npx prisma migrate deploy &&
-  #       npm run dev
-  #     "
-  #   environment:
-  #     - NODE_ENV=development
-  #     - MODE=development
-  #     - DATABASE_URL=${DATABASE_URL}
-  #     - DATABASE_HOST=${DATABASE_HOST}
-  #     - DATABASE_PORT=${DATABASE_PORT}
-  #     - DATABASE_USER=${DATABASE_USER}
-  #     - DATABASE_PASSWORD=${DATABASE_PASSWORD}
-  #     - DATABASE_NAME=${DATABASE_NAME}
-  #     - NEXTAUTH_URL=${NEXTAUTH_URL}
-  #     - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-  #     - S3_BUCKET_NAME=${S3_BUCKET_NAME}
-  #     - S3_ENDPOINT=${S3_ENDPOINT}
-  #     - S3_PORT=${S3_PORT}
-  #     - S3_ACCESS_KEY=${S3_ACCESS_KEY}
-  #     - S3_SECRET_KEY=${S3_SECRET_KEY}
-  #     - S3_USE_SSL=${S3_USE_SSL}
-  #     - PGADMIN_EMAIL=${PGADMIN_EMAIL}
-  #     - PGADMIN_PASSWORD=${PGADMIN_PASSWORD}
-  #   ports:
-  #     - "3000:3000"
-  #     - "5555:5555"
-  #   healthcheck:
-  #     test: ["CMD", "nc", "-z", "localhost", "3000"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - app_network
+  rabbitmq:
+    ports:
+      - "5672:5672"   # AMQP протокол
+      - "15672:15672" # Веб-интерфейс управления
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-admin}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-password}
+
+  balance-service:
+    build:
+      context: ./services/balance-service
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ./services/balance-service:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3001:3001"
+    depends_on:
+      - postgres
+      - rabbitmq

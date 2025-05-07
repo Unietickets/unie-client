@@ -7,11 +7,11 @@ import { UserInfo } from "@/entities/user";
 import { addIconToTransaction, TransactionCardsList } from '@/entities/transaction';
 import { LogoutButton } from "@features/auth";
 
+import { MyTickets } from './tabs';
 import * as S from './styles';
 import { Tab, Tabs } from './constants';
 
-const ProfilePage = ({ user, transactions }) => {
-  const [isActiveTickets, setIsActiveTickets] = useState(true);
+const ProfilePage = ({ user, transactions, tickets }) => {
   const [activeTab, setActiveTab] = useState(Tab.transactions);
 
   const transactionsWithIcons = transactions.map(addIconToTransaction);
@@ -33,15 +33,7 @@ const ProfilePage = ({ user, transactions }) => {
           ))}
         </TagGroup>
         {activeTab === Tab.myTickets && (
-          <S.SwitchItem>
-            <S.SwitchLabel htmlFor="tickets-switch">Завершенные</S.SwitchLabel>
-            <Switch
-              id="tickets-switch"
-              checked={isActiveTickets}
-              onChange={(checked) => setIsActiveTickets(checked)}
-            />
-            <S.SwitchLabel htmlFor="tickets-switch">Активные</S.SwitchLabel>
-          </S.SwitchItem>
+          <MyTickets tickets={tickets} />
         )}
         {activeTab === Tab.deals && (
           <div>

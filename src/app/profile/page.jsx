@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { ROUTES } from "@/core/routes";
 import * as userService from "@/entities/user/services";
+import * as ticketService from "@/entities/ticket/services";
 
 import ProfilePage from "@/views/profile";
 
@@ -67,10 +68,17 @@ const transactionsMock = [
 
 export default async function Profile() {
   const user = await userService.getUserInfoBySession();
+  const activeTickets = await ticketService.getUserActiveTickets({ userId: user.id });
+  const inactiveTickets = await ticketService.getUserInactiveTickets({ userId: user.id });
+
+  const tickets = {
+    active: activeTickets,
+    inActive: inactiveTickets
+  }
 
   if (user === null) {
     redirect(ROUTES.signIn.href)
   }
 
-  return <ProfilePage user={user} transactions={transactionsMock} />;
+  return <ProfilePage user={user} transactions={transactionsMock} tickets={tickets} />;
 }

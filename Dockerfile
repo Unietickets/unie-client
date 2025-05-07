@@ -75,6 +75,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 # Копируем всю директорию .next для корректной работы next start
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/prisma ./prisma
+# Копируем кастомный сервер
+COPY --from=builder --chown=nextjs:nodejs /app/server.js ./server.js
+COPY --from=builder --chown=nextjs:nodejs /app/src/server ./src/server
 
 # Создаем скрипт для проверки доступности базы данных
 RUN echo '#!/bin/bash\n\
@@ -90,9 +93,9 @@ echo "Running database migrations..."\n\
 npx prisma migrate deploy\n\
 \n\
 echo "Starting application..."\n\
-# if [ -f "/app/server.js" ]; then\n\
-  # NODE_OPTIONS="--experimental-json-modules" exec node .next/standalone/server.js\n\
-# else\n\
+if [ -f "/app/server.js" ]; then\n\
+  NODE_OPTIONS="--experimental-json-modules" exec node server.js\n\
+else\n\
   echo "server.js not found, trying to start with next start"\n\
   NODE_OPTIONS="--experimental-json-modules" exec npx next start\n\
 fi\n\

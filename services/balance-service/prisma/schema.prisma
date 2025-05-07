@@ -1,0 +1,53 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["clientExtensions"]
+}
+
+model User {
+  id              Int           @id @default(autoincrement())
+  name            String        @db.VarChar(255)
+  registration_date DateTime    @default(now())
+  email           String?       @unique @db.VarChar(255)
+  password        String        @db.VarChar(255)
+  phone_number    String?       @db.VarChar(20)
+  is_active       Boolean       @default(true)
+  UserBalance     UserBalance[]
+}
+
+model UserBalance {
+  id              Int      @id @default(autoincrement())
+  user_id         Int
+  active_balance  Decimal  @db.Decimal(10, 2)
+  pending_balance Decimal  @db.Decimal(10, 2)
+  activation_date DateTime
+  created_at      DateTime @default(now())
+  updated_at      DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+  id               Int                  @id @default(autoincrement())
+  user_id          Int
+  direction        TransactionDirection
+  amount           Decimal              @db.Decimal(10, 2)
+  transaction_date DateTime             @default(now())
+  status           TransactionStatus    @default(created)
+}
+
+enum TransactionDirection {
+  deposit
+  withdraw
+}
+
+enum TransactionStatus {
+  created
+  in_process
+  completed
+}

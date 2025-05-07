@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node server.js",
+    "dev:next": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
+    "start:next": "next start",
     "lint": "next lint",
     "migrate": "dotenv -e .env.development -- npx prisma migrate dev",
     "generate:client": "dotenv -e .env.development -- npx prisma generate",
@@ -25,6 +27,9 @@
     "@adobe/react-spectrum": "3.39.0",
     "@emotion/is-prop-valid": "1.3.1",
     "@prisma/client": "6.1.0",
+    "amqplib": "^0.10.7",
+    "@stripe/react-stripe-js": "3.1.1",
+    "@stripe/stripe-js": "5.7.0",
     "bcryptjs": "2.4.3",
     "eslint-import-resolver-alias": "1.1.2",
     "jsonwebtoken": "9.0.2",
@@ -39,8 +44,9 @@
     "react-dom": "19.0.0",
     "react-select": "5.10.0",
     "react-switch": "7.1.0",
-    "styled-components": "6.1.14",
-    "zod": "3.24.2"
+    "zod": "3.24.2",
+    "stripe": "17.7.0",
+    "styled-components": "6.1.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3",

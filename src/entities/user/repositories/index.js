@@ -27,3 +27,11 @@ export async function  createUser({ email, hashedPassword, name }) {
     }
   });
 }
+
+export async function getUserBalance(id) {
+  return await prisma.userBalance.findFirst({
+    where: {
+      user_id: id,
+    }
+  });
+}

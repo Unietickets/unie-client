@@ -50,3 +50,30 @@ export const createTicket = async ({
     }
   });
 }
+
+export const getTicketById = async (ticketId) => {
+  return await prisma.ticket.findUnique({
+    where: {
+      id: ticketId,
+    },
+  });
+};
+
+export const updateTicket = async (ticketId, data) => {
+  return await prisma.ticket.update({
+    where: {
+      id: ticketId,
+    },
+    data,
+  });
+};
+
+export const getUserTicketsById = async (userId) => {
+  return await prisma.ticket.findMany({
+    where: {
+      user_id: {
+        equals: userId
+      }
+    }
+  });
+}
