@@ -45,5 +45,7 @@ export const buyTicket = async ({ ticketId, buyerId, amount, currency }) => {
     // В реальном приложении здесь должна быть более сложная логика обработки ошибок
   }
 
-  return ticket;
+  // Возвращаем обновленные данные билета, чтобы у вызывающего кода была актуальная информация
+  const updatedTicket = await ticketService.getTicketById({ ticketId });
+  return updatedTicket;
 };

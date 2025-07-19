@@ -29,7 +29,7 @@ export async function GET(request) {
       );
     }
 
-    const userId = session.user.id;
+    const userId = session.user?.id;
 
     // Проверяем статус платежа в Stripe
     const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -63,7 +63,7 @@ export async function GET(request) {
     const cookie = await cookies();
     // Сохраняем информацию о покупке в cookies для отображения на странице успеха
     cookie.set('lastPurchasedTicket', JSON.stringify({
-      id: ticket.id,
+      id: ticket?.id,
       eventId: ticket.event_id,
       price: ticket.price,
       purchaseDate: new Date().toISOString()
