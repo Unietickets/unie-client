@@ -10,3 +10,6 @@ export { Arrow as ArrowIcon } from './Arrow';
 export { Ticket as TicketIcon } from './Ticket';
 export { Withdraw as WithdrawIcon } from './Withdraw';
 export { Cross as CrossIcon } from './Cross';
+export { Apple as AppleIcon } from './Apple';
+export { Google as GoogleIcon } from './Google';
+export { Facebook as FacebookIcon } from './Facebook';
