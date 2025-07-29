@@ -3,6 +3,7 @@ export const TYPOGRAPHY = {
     h2: 'h2',
     body: 'body',
     body2: 'body2',
+    TextS: 'Text S',
 };
 
 export const getTypographyStyles = (variant) => {
@@ -37,6 +38,14 @@ export const getTypographyStyles = (variant) => {
         font-weight: 400;
         font-size: 14px;
         line-height: 18px;
+      `;
+
+    case 'Text S':
+      return `
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 22px;
       `;
 
     default:

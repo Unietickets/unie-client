@@ -14,10 +14,6 @@ export const Button = forwardRef((props, ref) => {
     >
       {isLoading && (
         <S.LoaderContainer>
-          {/* <Loader
-            width="100%"
-            height="100%"
-          /> */}
           Loading...
         </S.LoaderContainer>
       )}
