@@ -97,6 +97,9 @@ export const authOptions = {
 
       return true;
     },
+    async redirect() {
+      return '/';
+    }
   },
   secret: NEXTAUTH_SECRET,
 };
