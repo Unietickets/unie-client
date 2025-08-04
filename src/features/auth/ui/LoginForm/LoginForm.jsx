@@ -8,6 +8,8 @@ import { Input, ErrorCaption } from "@shared/ui";
 import { useValidation } from "@/shared/lib";
 import { ROUTES } from "@core/routes";
 
+import { AuthViaServices } from "../AuthViaServices";
+
 import { loginSchema } from "./LoginForm.validation";
 import * as S from "./LoginForm.styles";
 
@@ -75,6 +77,8 @@ export function LoginForm() {
       <S.Button variant="primary" size="medium" isRounded type="submit" fullWidth={false}>
         Login
       </S.Button>
+
+      <AuthViaServices />
 
       <S.Caption>
         Don't have an account?&nbsp;

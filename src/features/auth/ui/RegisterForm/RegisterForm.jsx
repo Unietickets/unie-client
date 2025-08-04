@@ -6,6 +6,8 @@ import { Input, Switch, ErrorCaption } from '@/shared/ui';
 import { useValidation } from '@/shared/lib';
 import { ROUTES } from '@core/routes';
 
+import { AuthViaServices } from '../AuthViaServices';
+
 import { registerSchema } from './RegisterForm.validation';
 import { createUserAction } from './action';
 import * as S from './RegisterForm.styles';
@@ -119,6 +121,8 @@ export function RegisterForm() {
       >
         Register
       </S.Button>
+
+      <AuthViaServices />
 
       <S.Caption>
         Already have an account?&nbsp;

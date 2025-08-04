@@ -51,7 +51,7 @@ const ButtonVariants = {
     }
   `,
   secondary: css`
-    background-color: ${({ theme }) => theme.secondary};
+    background-color: ${Colors.White};
     color: ${Colors.Dull};
     border: 2px solid ${Colors.Dull};
 

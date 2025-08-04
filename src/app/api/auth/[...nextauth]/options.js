@@ -1,4 +1,8 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import AppleProvider from "next-auth/providers/apple";
+import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+
 import bcrypt from "bcryptjs";
 
 import { prisma } from "@/shared/lib/db";
@@ -7,6 +11,18 @@ import { NEXTAUTH_SECRET } from "@/core/constants";
 
 export const authOptions = {
   providers: [
+    AppleProvider({
+      clientId: process.env.APPLE_CLIENT_ID,
+      clientSecret: process.env.APPLE_CLIENT_SECRET
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -64,6 +80,26 @@ export const authOptions = {
       }
       return session;
     },
+    async signIn({ user }) {
+      const existingUser = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
+
+      if (!existingUser) {
+        await prisma.user.create({
+          data: {
+            email: user.email,
+            name: user.name,
+            password: ' ',
+          },
+        });
+      }
+
+      return true;
+    },
+    async redirect() {
+      return '/';
+    }
   },
   secret: NEXTAUTH_SECRET,
 };
