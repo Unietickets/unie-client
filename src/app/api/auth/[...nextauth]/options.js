@@ -63,7 +63,7 @@ export const authOptions = {
     }),
   ],
   pages: {
-    signIn: ROUTES.auth.signIn,
+    signIn: ROUTES.signIn.href,
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -97,8 +97,11 @@ export const authOptions = {
 
       return true;
     },
-    async redirect() {
-      return '/';
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      else if (new URL(url).origin === baseUrl) return url
+      
+      return baseUrl
     }
   },
   secret: NEXTAUTH_SECRET,

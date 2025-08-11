@@ -26,7 +26,7 @@ export async function createUserAction(_, formData) {
   const res = await authService.register({ email, password, name });
 
   if (!res.ok) {
-    console.error('Error creating user:', res.error);
+    console.error('Error creating user:', res.message);
     return { message: 'Please enter a valid email', data }
   }
 

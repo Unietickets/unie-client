@@ -1,4 +1,4 @@
-import { createPortal } from 'react-dom';
+import { createPortal } from 'react';
 
 export const Portal = (props) => {
   const {
@@ -8,4 +8,3 @@ export const Portal = (props) => {
 
   return createPortal(children, target);
 };
- 

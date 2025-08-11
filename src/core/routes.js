@@ -10,69 +10,79 @@ import {
 export const ROUTES = {
   home: {
     href: '/',
-    label: 'Home'
-  },
-  auth: {
-    signIn: '/auth/sign-in',
-    signUp: '/auth/sign-up',
+    label: 'Home',
+    type: 'inner',
   },
   profile: {
     Icon: UserIcon,
     href: '/profile',
-    label: 'My account'
+    label: 'My account',
+    type: 'inner',
   },
   events: {
     Icon: ArrowUpIcon,
     href: '/events',
-    label: 'Events'
+    label: 'Events',
+    type: 'outer',
   },
   withdraw: {
       href: '/balance/withdraw',
-      label: 'Withdraw'
+      label: 'Withdraw',
+      type: 'inner',
   },
   deposit: {
       href: '/balance/deposit',
-      label: 'Deposit'
+      label: 'Deposit',
+      type: 'inner',
   },
   signUp: {
       href: '/auth/sign-up',
-      label: 'Sign Up'
+      label: 'Sign Up',
+      type: 'outer',
   },
   signIn: {
       href: '/auth/sign-in',
-      label: 'Sign In'
+      label: 'Sign In',
+      type: 'outer',
   },
   tickets: {
     href: '/tickets',
     label: 'Tickets',
+    type: 'inner',
     ownList: {
       Icon: ReceiptIcon,
       href: '/tickets/own',
-      label: 'My tickets'
+      label: 'My tickets',
+      type: 'inner',
     },
     create: {
       Icon: SackDollarIcon,
       href: '/tickets/create',
-      label: 'Cell tickets'
+      label: 'Cell tickets',
+      type: 'inner',
     }
   },
   support: {
     Icon: UserHeadsetIcon,
     href: '/support',
-    label: 'Support'
+    label: 'Support',
+    type: 'outer',
   },
   FAQ: {
     Icon: QuestionIcon,
     href: '/FAQ',
-    label: 'FAQ'
+    label: 'FAQ',
+    type: 'outer',
   },
   termsAndConditions: {
     href: '/terms-and-conditions',
-    label: 'Terms and Conditions'
+    label: 'Terms and Conditions',
+    type: 'outer',
   },
   payment: {
     href: '/payment',
-    label: 'Payment'
+    label: 'Payment',
+    type: 'inner',
   }
 }
 
