@@ -7,7 +7,7 @@ import * as authService from "../../services";
 export async function createUserAction(_, formData) {
   const email = formData.get('email');
   const password = formData.get('password');
-  const passwordRepeat = formData.get('passwordRepeat');
+  const passwordRepeat = formData.get('password-repeat');
   const name = formData.get('name');
   const acceptTermsAndConditions = formData.get('accept-terms-and-conditions');
 
@@ -26,6 +26,7 @@ export async function createUserAction(_, formData) {
   const res = await authService.register({ email, password, name });
 
   if (!res.ok) {
+    console.error('Error creating user:', res.error);
     return { message: 'Please enter a valid email', data }
   }
 
