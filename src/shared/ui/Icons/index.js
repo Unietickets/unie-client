@@ -13,3 +13,5 @@ export { Cross as CrossIcon } from './Cross';
 export { Apple as AppleIcon } from './Apple';
 export { Google as GoogleIcon } from './Google';
 export { Facebook as FacebookIcon } from './Facebook';
+export { OpenedEye as OpenedEyeIcon } from './OpenedEye';
+export { ClosedEye as ClosedEyeIcon } from './ClosedEye';

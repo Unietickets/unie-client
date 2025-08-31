@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LoginForm } from '@features/auth';
+import { Auth } from '@/features/auth/ui/Auth/Auth';
 
 // Отключаем статическую генерацию для этой страницы
 export const dynamic = 'force-dynamic';
@@ -9,7 +9,7 @@ export const fetchCache = 'force-no-store';
 const SignIn = () => {
     return (
         <div>
-            <LoginForm />
+            <Auth />
         </div>
     );
 };

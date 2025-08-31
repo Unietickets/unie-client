@@ -61,5 +61,8 @@ export const Colors = {
     Nero: '#252525',
     Black: '#000000',
 
+    // other
+    DhusarGrey: '#ABABAB',
+
     Transparent: 'transparent',
   }
