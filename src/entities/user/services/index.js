@@ -8,6 +8,10 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import * as userRepository from '../repositories';
 
 const addBalanceInfoToUserModel = async (user) => {
+  if (!user) {
+    return user;
+  }
+
   const userBalance = await userRepository.getUserBalance(user.id);
 
   const userWithBalance = {

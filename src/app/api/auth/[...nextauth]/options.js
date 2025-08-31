@@ -30,6 +30,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        console.log("credentials", credentials)
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
@@ -44,10 +45,14 @@ export const authOptions = {
           return null;
         }
 
+        console.log("user", user)
+
         const passwordsMatch = await bcrypt.compare(
           credentials.password,
           user.password
         );
+
+        console.log("passwordsMatch", passwordsMatch)
 
         if (!passwordsMatch) {
           return null;
@@ -100,7 +105,7 @@ export const authOptions = {
     async redirect({ url, baseUrl }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`
       else if (new URL(url).origin === baseUrl) return url
-      
+
       return baseUrl
     }
   },

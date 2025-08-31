@@ -7,15 +7,15 @@ import { Colors } from '@shared/constants';
 
 export const Input = styled.input`
   width: 100%;
-  padding: var(--input-padding, 8px 16px);
+  padding: var(--input-padding, 14px 16px);
 
-  ${getTypographyStyles(TYPOGRAPHY.caption2)};
-  color: var(--input-text-color, ${Colors.Mako});
+  ${getTypographyStyles(TYPOGRAPHY.body)};
+  color: var(--input-text-color, ${Colors.White});
 
   outline: var(--input-outline, none);
   box-shadow: var(--input-box-shadow, none);
   border-radius: 15px;
-  border: 1px solid ${Colors.TitaniumWhite};
+  border: 1px solid ${Colors.Mako};
   background-color: ${Colors.Transparent};
 
   ${({ withoutBorder }) =>
@@ -33,7 +33,7 @@ export const Input = styled.input`
     `};
 
   &::placeholder {
-    --input-text-color: ${Colors.Palladium};
+    --input-text-color: ${Colors.DhusarGrey};
     --input-opacity: 0.5;
   }
 

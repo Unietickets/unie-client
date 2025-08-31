@@ -11,9 +11,9 @@ if (typeof window === 'undefined') {
   const initRabbitMQ = async () => {
     try {
       // Импортируем модули только на сервере
-      const { initRabbitMQ } = await import("@/shared/lib/rabbitmq/init");
-      const { setupTicketQueueConsumer } = await import("@/entities/ticket/services/ticketQueue");
-      const { setupEventQueueConsumer } = await import("@/entities/event/services/eventQueue");
+      const { initRabbitMQ } = await import("../shared/lib/rabbitmq/init.js");
+      const { setupTicketQueueConsumer } = await import("./entities/ticket/services/ticketQueue");
+      const { setupEventQueueConsumer } = await import("./entities/event/services/eventQueue");
 
       // Инициализируем подключение к RabbitMQ
       await initRabbitMQ();

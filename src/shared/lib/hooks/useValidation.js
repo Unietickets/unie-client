@@ -7,6 +7,7 @@ export const useValidation = (schema) => {
   const [errors, setErrors] = useState({});
 
   const validate = (formData) => {
+    console.log('formData', formData)
     try {
       schema.parse(formData);
       setErrors({});
@@ -24,8 +25,16 @@ export const useValidation = (schema) => {
     }
   };
 
+  const addErrors = (newErrors) => {
+    setErrors({
+      ...errors,
+      ...newErrors,
+    })
+  }
+
   return {
     errors,
-    validate
+    validate,
+    addErrors
   }
 }
