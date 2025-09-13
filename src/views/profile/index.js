@@ -37,7 +37,7 @@ const ProfilePage = ({ user, transactions, tickets }) => {
         )}
         {activeTab === Tab.deals && (
           <div>
-            deals
+            deals (ci/cd test)
           </div>
         )}
         {activeTab === Tab.transactions && (
