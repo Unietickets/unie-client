@@ -9,101 +9,241 @@ generator client {
   binaryTargets   = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "rhel-openssl-1.0.x", "linux-arm64-openssl-3.0.x"]
 }
 
-model User {
-  id                Int                @id @default(autoincrement())
-  name              String             @db.VarChar(255)
-  registration_date DateTime           @default(now())
-  email             String?            @unique @db.VarChar(255)
-  password          String             @db.VarChar(255)
-  phone_number      String?            @db.VarChar(20)
-  is_active         Boolean            @default(true)
-  reset_token       String?
-  reset_token_exp   DateTime?
-  verification_code String?
-  verification_code_exp DateTime?
-  transactions      Transaction[]
-  tickets           Ticket[]
-  dealsAsBuyer      Deal[]             @relation("BuyerDeals")
-  dealsAsSeller     Deal[]             @relation("SellerDeals")
-  RecommendedEvent  RecommendedEvent[]
-  UserBalance       UserBalance[]
+// ----------------------------
+// ENUMs
+// ----------------------------
+enum NodeStatus {
+  active
+  archive
 }
 
+enum EventStatus {
+  draft
+  published
+}
+
+enum TicketStatus {
+  available
+  reserved
+  sold
+}
+
+enum TransactionStatus {
+  created
+  pending
+  paid
+  canceled
+}
+
+enum TransactionDirection {
+  deposit
+  withdraw
+}
+
+// ----------------------------
+// Core
+// ----------------------------
+model Node {
+  id                String              @id @default(uuid()) @db.Uuid
+  name              String              @db.Text
+  slug              String              @unique
+  status            NodeStatus
+  commission        Decimal             @db.Decimal(5, 2)
+  created_at        DateTime?
+  main_organizer_id Int?
+
+  // relations
+  events            Event[]
+  adminUsers        AdminUser[]
+  userNodes         UserNodes[]
+  tickets           Ticket[]
+  transactions      Transaction[]
+  purchaseItems     PurchaseItem[]
+  organizerBalances OrganizerBalance[]
+
+  @@map("Nodes")
+}
+
+model User {
+  id                    Int                 @id @default(autoincrement())
+  email                 String              @unique @db.Text
+  password_hash         String              @db.Text
+  name                  String              @db.Text
+  phone_number          String?             @db.VarChar(20)
+  is_active             Boolean             @default(true)
+  registration_date     DateTime?
+  external_provider_id  String?             @db.Text
+  reset_token           String?             @db.Text
+  reset_token_exp       DateTime?
+  verification_code     String?             @db.Text
+  verification_code_exp DateTime?
+  
+  // relations
+  userNodes             UserNodes[]
+  tickets_bought        Ticket[]            @relation("TicketBuyer")
+  recommendedEvents     RecommendedEvent[]
+  transactions          Transaction[]
+
+  @@map("Users")
+}
+
+// M2M (User ↔ Node)
+model UserNodes {
+  user_id Int
+  node_id String @db.Uuid
+
+  // relations
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  node Node @relation(fields: [node_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, node_id])
+  @@map("UserNodes")
+}
+
+model AdminUser {
+  id            Int     @id @default(autoincrement())
+  email         String? @db.Text
+  password_hash String? @db.Text
+  role          String  @default("default") @db.VarChar(255)
+  node_id       String  @db.Uuid
+  user_hash     String? @db.Text
+  is_docs_verif Boolean?
+
+  // relations
+  node Node @relation(fields: [node_id], references: [id], onDelete: Cascade)
+
+  @@map("AdminUsers")
+}
+
+// ----------------------------
+// Dictionaries
+// ----------------------------
+model Genre {
+  id   Int    @id @default(autoincrement())
+  name String @unique @db.VarChar(100)
+
+  // relations
+  eventGenres EventGenre[]
+
+  @@map("Genres")
+}
+
+model City {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique @db.VarChar(100)
+  // back relation to Event.city
+  events Event[]
+
+  @@map("Cities")
+}
+
+model Currency {
+  id   Int    @id @default(autoincrement())
+  code String @unique @db.VarChar(10)
+
+  // relations
+  tickets       Ticket[]
+  transactions  Transaction[]
+  orgBalances   OrganizerBalance[]
+
+  @@map("Currencies")
+}
+
+// ----------------------------
+// Media
+// ----------------------------
+model File {
+  id           String   @id @default(uuid()) @db.Uuid
+  bucket       String   @db.Text
+  filename     String   @unique @db.Text
+  originalname String   @db.Text
+  created_at   DateTime?
+  size         Int
+
+  // relations
+  eventPhotos EventPhoto[]
+
+  @@map("Files")
+}
+
+// ----------------------------
+// Events
+// ----------------------------
 model Event {
   id                Int                @id @default(autoincrement())
+  node_id           String             @db.Uuid
   name              String             @db.VarChar(255)
-  status            EventStatus        @default(coming)
-  genre             String?            @db.VarChar(100)
-  tickets_available Int                @default(0)
-  tickets_sold      Int                @default(0)
-  event_date        DateTime
-  location          String?            @db.VarChar(255)
+  status            EventStatus
   description       String?            @db.Text
-  photos            EventPhoto[]
-  tickets           Ticket[]
-  deals             Deal[]
-  recommendations   RecommendedEvent[]
+  date_start        DateTime
+  date_end          DateTime
+  location          String?            @db.VarChar(255)
+  address           String?            @db.Text
+  city_id           Int?
+  tickets_prices    Decimal            @default(0) @db.Decimal(10, 2)
+  tickets_total     Int                @default(0)
+  tickets_available Int                @default(0)
+  last_edit         DateTime?          @db.Timestamptz
+
+  // relations
+  node         Node        @relation(fields: [node_id], references: [id], onDelete: Cascade)
+  city         City?       @relation(fields: [city_id], references: [id])
+  eventGenres  EventGenre[]
+  photos       EventPhoto[]
+  tickets      Ticket[]
+  recs         RecommendedEvent[]
+  transactions Transaction[]
+
+  @@map("Events")
 }
 
-model Transaction {
-  id               Int                  @id @default(autoincrement())
-  user_id          Int
-  direction        TransactionDirection
-  amount           Decimal              @db.Decimal(10, 2)
-  transaction_date DateTime             @default(now())
-  status           TransactionStatus    @default(created)
+model EventGenre {
+  event_id Int
+  genre_id Int
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-}
-
-model Ticket {
-  id          Int          @id @default(autoincrement())
-  user_id     Int
-  buyer_id    Int?
-  event_id    Int
-  upload_date DateTime     @default(now())
-  image       String?      @db.VarChar(255)
-  status      TicketStatus @default(available)
-  is_verified Boolean      @default(false)
-  price       Decimal      @db.Decimal(10, 2)
-  description String?
-  deal        DealTicket?
-
-  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  // relations
   event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
-}
+  genre Genre @relation(fields: [genre_id], references: [id], onDelete: Cascade)
 
-model Deal {
-  id        Int          @id @default(autoincrement())
-  event_id  Int
-  buyer_id  Int
-  seller_id Int
-  deal_date DateTime     @default(now())
-  status    DealStatus   @default(in_progress)
-  price     Decimal      @db.Decimal(10, 2)
-  tickets   DealTicket[]
-
-  event  Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
-  buyer  User  @relation("BuyerDeals", fields: [buyer_id], references: [id], onDelete: Cascade)
-  seller User  @relation("SellerDeals", fields: [seller_id], references: [id], onDelete: Cascade)
+  @@id([event_id, genre_id])
+  @@map("EventGenres")
 }
 
 model EventPhoto {
-  id       Int    @id @default(autoincrement())
+  id       Int     @id @default(autoincrement())
   event_id Int
-  file_id  String
+  file_id  String  @db.Uuid
+  location String? @db.VarChar(100)
 
+  // relations
   event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
   file  File  @relation(fields: [file_id], references: [id], onDelete: Cascade)
+
+  @@map("EventPhotos")
 }
 
-model DealTicket {
-  id        Int @id @default(autoincrement())
-  deal_id   Int
-  ticket_id Int @unique
+// ----------------------------
+// Tickets & Recs
+// ----------------------------
+model Ticket {
+  id            Int       @id @default(autoincrement())
+  event_id      Int
+  buyer_user_id Int?
+  node_id       String    @db.Uuid
+  created_at    DateTime  @default(now())
+  price         Decimal   @db.Decimal(10, 2)
+  currency_id   Int
+  status        TicketStatus
+  description   String?   @db.Text
 
-  deal   Deal   @relation(fields: [deal_id], references: [id], onDelete: Cascade)
-  ticket Ticket @relation(fields: [ticket_id], references: [id])
+  // relations
+  event      Event    @relation(fields: [event_id], references: [id], onDelete: Cascade)
+  buyer_user User?    @relation("TicketBuyer", fields: [buyer_user_id], references: [id])
+  node       Node     @relation(fields: [node_id], references: [id], onDelete: Cascade)
+  currency   Currency @relation(fields: [currency_id], references: [id])
+  items      PurchaseItem[]
+
+  @@map("Tickets")
 }
 
 model RecommendedEvent {
@@ -113,58 +253,81 @@ model RecommendedEvent {
   weight     Float    @default(1.0)
   created_at DateTime @default(now())
 
+  // relations
   event Event @relation(fields: [event_id], references: [id], onDelete: Cascade)
-  user  User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user  User? @relation(fields: [user_id], references: [id])
 
   @@unique([event_id, user_id])
+  @@map("RecommendedEvents")
 }
 
-model File {
-  id           String       @id @default(uuid())
-  bucket       String
-  fileName     String       @unique
-  originalName String
-  createdAt    DateTime     @default(now())
-  size         Int
-  eventPhotos  EventPhoto[]
+// ----------------------------
+// Finance
+// ----------------------------
+model Transaction {
+  id                Int                 @id @default(autoincrement())
+  node_id           String              @db.Uuid
+  user_id           Int
+  event_id          Int?
+  status            TransactionStatus
+  direction         TransactionDirection
+  amount            Decimal             @db.Decimal(10, 2)
+  currency_id       Int
+  request_date      DateTime?
+  payment_system_id String?             @db.Text
+
+  // relations
+  node      Node      @relation(fields: [node_id], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [user_id], references: [id])
+  event     Event?    @relation(fields: [event_id], references: [id])
+  currency  Currency  @relation(fields: [currency_id], references: [id])
+  items     PurchaseItem[]
+
+  @@map("Transactions")
 }
 
-model UserBalance {
+model PurchaseItem {
+  id             Int      @id @default(autoincrement())
+  node_id        String   @db.Uuid
+  transaction_id Int
+  ticket_id      Int
+  is_used        Boolean  @default(false)
+  qr_token       String   @unique @db.Text
+  validated_at   DateTime?
+
+  // relations
+  node        Node        @relation(fields: [node_id], references: [id], onDelete: Cascade)
+  transaction Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  ticket      Ticket      @relation(fields: [ticket_id], references: [id])
+
+  @@map("PurchaseItems")
+}
+
+// ----------------------------
+// Organizers (минимальный каркас, нужен для FK в OrganizerBalances)
+// ----------------------------
+model Organizer {
+  id                Int                 @id @default(autoincrement())
+  organizerBalances OrganizerBalance[]
+
+  @@map("Organizers")
+}
+
+model OrganizerBalance {
   id              Int      @id @default(autoincrement())
-  user_id         Int
+  organizer_id    Int
+  node_id         String   @db.Uuid
+  currency_id     Int
   active_balance  Decimal  @db.Decimal(10, 2)
   pending_balance Decimal  @db.Decimal(10, 2)
-  activation_date DateTime
-  created_at      DateTime @default(now())
-  updated_at      DateTime @default(now())
+  created_at      DateTime?
+  activation_date DateTime?
+  updated_at      DateTime?
 
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-}
+  // relations
+  organizer Organizer @relation(fields: [organizer_id], references: [id], onDelete: Cascade)
+  node      Node      @relation(fields: [node_id], references: [id], onDelete: Cascade)
+  currency  Currency  @relation(fields: [currency_id], references: [id])
 
-enum EventStatus {
-  coming
-  completed
-}
-
-enum TransactionDirection {
-  deposit
-  withdraw
-}
-
-enum TransactionStatus {
-  created
-  in_process
-  completed
-}
-
-enum TicketStatus {
-  available
-  sold
-  reserved
-}
-
-enum DealStatus {
-  in_progress
-  completed
-  declined
+  @@map("OrganizerBalances")
 }

@@ -10,7 +10,7 @@
     "start:next": "next start",
     "lint": "next lint",
     "migrate": "dotenv -e .env.development -- npx prisma migrate dev",
-    "generate:client": "dotenv -e .env.development -- npx prisma generate",
+    "migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
     "studio": "dotenv -e .env.development -- npx prisma studio",
     "docker:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.development up -d",
     "docker:dev:build": "docker compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.development up -d --build",
