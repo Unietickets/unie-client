@@ -41,12 +41,6 @@ RUN echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is set: $(test -n "$NEXT_PUBLIC_STR
 RUN echo "STRIPE_SECRET_KEY is set: $(test -n "$STRIPE_SECRET_KEY" && echo "YES" || echo "NO")"
 RUN echo "DATABASE_URL is set: $(test -n "$DATABASE_URL" && echo "YES" || echo "NO")"
 
-# Проверяем переменные окружения перед сборкой
-COPY check-env.sh ./check-env.sh
-RUN chmod +x check-env.sh && ./check-env.sh
-# Удаляем диагностический файл
-RUN rm check-env.sh
-
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
