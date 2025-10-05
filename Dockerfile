@@ -20,8 +20,8 @@ WORKDIR /app
 
 # Определяем аргументы сборки для переменных окружения
 ARG DATABASE_URL
-ARG STRIPE_SECRET_KEY
-ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ARG STRIPE_SECRET_KEY=""
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=""
 ARG NODE_ENV
 
 # Устанавливаем переменные окружения для сборки
@@ -30,16 +30,9 @@ ENV NODE_ENV=${NODE_ENV}
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--experimental-json-modules"
 
-# Устанавливаем Stripe переменные только если они доступны
-ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
-ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
-
-# Выводим переменные для отладки (без секретных значений)
-RUN echo "Build environment variables set:"
-RUN echo "NODE_ENV: $NODE_ENV"
-RUN echo "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY is set: $(test -n "$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY" && echo "YES" || echo "NO")"
-RUN echo "STRIPE_SECRET_KEY is set: $(test -n "$STRIPE_SECRET_KEY" && echo "YES" || echo "NO")"
-RUN echo "DATABASE_URL is set: $(test -n "$DATABASE_URL" && echo "YES" || echo "NO")"
+# Устанавливаем Stripe переменные только если они не пустые
+ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
 
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
