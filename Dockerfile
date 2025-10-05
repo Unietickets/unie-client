@@ -26,11 +26,13 @@ ARG NODE_ENV
 
 # Устанавливаем переменные окружения для сборки
 ENV DATABASE_URL=${DATABASE_URL}
-ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
-ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
 ENV NODE_ENV=${NODE_ENV}
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--experimental-json-modules"
+
+# Устанавливаем Stripe переменные только если они доступны
+ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
 
 # Выводим переменные для отладки (без секретных значений)
 RUN echo "Build environment variables set:"
