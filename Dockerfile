@@ -38,22 +38,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 RUN npx prisma generate
-# TODO удалить флаг
-RUN npm run build --debug
-# Проверяем содержимое директории .next
-RUN ls -la /app/.next || echo "Директория .next не существует"
-# Проверяем наличие директории standalone и создаем ее, если она не существует
-RUN if [ ! -d "/app/.next/standalone" ]; then \
-    echo "Директория standalone не существует, создаем ее вручную"; \
-    mkdir -p /app/.next/standalone; \
-    cp -r /app/.next/server /app/.next/standalone/; \
-    cp -r /app/.next/static /app/.next/standalone/; \
-    cp /app/package.json /app/.next/standalone/; \
-    cp -r /app/public /app/.next/standalone/; \
-    cp /app/.next/required-server-files.json /app/.next/standalone/; \
-    echo "Директория standalone создана вручную"; \
-    ls -la /app/.next/standalone; \
-fi
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
