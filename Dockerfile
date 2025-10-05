@@ -18,6 +18,12 @@ RUN npm ci
 FROM base AS builder
 WORKDIR /app
 
+# Определяем аргументы сборки для переменных окружения
+ARG DATABASE_URL
+ARG STRIPE_SECRET_KEY
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+ARG NODE_ENV
+
 # Устанавливаем переменные окружения
 ENV DATABASE_URL=${DATABASE_URL}
 ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
@@ -53,6 +59,16 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_OPTIONS="--experimental-json-modules"
+
+# Определяем аргументы для переменных окружения времени выполнения
+ARG DATABASE_URL
+ARG STRIPE_SECRET_KEY
+ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+
+# Устанавливаем переменные окружения времени выполнения
+ENV DATABASE_URL=${DATABASE_URL}
+ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
 
 # Установка необходимых пакетов
 RUN apt-get update && apt-get install -y \
