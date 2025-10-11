@@ -84,7 +84,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/src/server ./src/server
 RUN echo '#!/bin/bash\n\
 echo "Waiting for database to be ready..."\n\
 \n\
-while ! nc -z $DATABASE_HOST $DATABASE_PORT; do\n\
+while ! nc -z $DATABASE_URL; do\n\
   echo "Database is not ready - sleeping for 2 seconds"\n\
   sleep 2\n\
 done\n\
